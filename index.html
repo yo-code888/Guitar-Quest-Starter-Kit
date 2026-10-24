@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0b10">
+<title>Guitar Quest | ギター練習ラボ</title>
+
+<style>
+:root {
+  --bg:#0b0b10;
+  --panel:#161620;
+  --line:#30303e;
+  --text:#f5f5fa;
+  --muted:#a4a4b5;
+  --green:#9af5c2;
+  --purple:#b7a4ff;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:radial-gradient(ellipse at top right,#292443,var(--bg) 50%);
+  color:var(--text);
+  font:15px/1.6 system-ui,sans-serif;
+}
+button { cursor:pointer; font:inherit; }
+button:disabled { opacity:.5; cursor:not-allowed; }
+.app { max-width:1050px; margin:auto; padding:22px 16px 45px; }
+header { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.brand { display:flex; align-items:center; gap:12px; }
+.logo {
+  background:var(--green); color:#111;
+  border-radius:13px; width:44px; height:44px;
+  display:grid; place-items:center; font-size:25px;
+}
+h1 { font-size:20px; margin:0; }
+.subtitle { color:var(--muted); font-size:12px; }
+.xp {
+  background:#1d3029; border:1px solid #355846;
+  border-radius:30px; padding:8px 12px; white-space:nowrap;
+}
+.xp strong { color:var(--green); }
+nav { display:flex; gap:7px; overflow-x:auto; margin:20px 0; }
+nav button {
+  color:var(--muted); background:transparent;
+  border:1px solid transparent; border-radius:10px;
+  padding:10px 13px; white-space:nowrap;
+}
+nav button.active { background:#22222f; color:white; border-color:var(--line); }
+.view { display:none; }
+.view.active { display:block; }
+.hero {
+  display:grid; grid-template-columns:1.5fr 1fr;
+  align-items:center; gap:20px; padding:26px;
+  border:1px solid var(--line); border-radius:22px;
+  background:linear-gradient(125deg,#202032,#151b21);
+}
+.eyebrow { color:var(--green); font-size:11px; letter-spacing:1.5px; font-weight:bold; }
+.hero h2 { font-size:clamp(30px,5vw,43px); line-height:1.2; margin:10px 0; }
+p { color:var(--muted); }
+.hero-art {
+  background:radial-gradient(circle,#443b68,#20202c);
+  border-radius:18px; min-height:175px;
+  display:grid; place-items:center; font-size:85px;
+}
+.primary,.secondary {
+  border-radius:11px; padding:12px 16px; font-weight:bold;
+}
+.primary { background:var(--green); color:#101016; border:0; }
+.secondary { background:#252532; color:var(--text); border:1px solid var(--line); }
+.grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:16px; }
+.card,.panel {
+  background:var(--panel); border:1px solid var(--line);
+  border-radius:17px; padding:18px; min-width:0;
+}
+.card h3 { margin:5px 0; }
+.card p { font-size:13px; }
+.emoji { font-size:27px; }
+.section-head {
+  display:flex; align-items:center; justify-content:space-between;
+  gap:10px; margin:25px 0 12px;
+}
+.section-head h2 { font-size:20px; margin:0; }
+.small { font-size:12px; }
+.muted { color:var(--muted); }
+.tuner-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.row.between { justify-content:space-between; }
+.note {
+  text-align:center; font-size:clamp(55px,10vw,85px);
+  line-height:1.3; font-weight:900;
+}
+.freq { text-align:center; color:var(--muted); }
+.meter {
+  height:8px; background:#30303e; border-radius:9px;
+  position:relative; margin:27px 4px 12px;
+}
+.meter:after {
+  content:""; position:absolute; left:50%; top:-5px;
+  height:18px; width:2px; background:white;
+}
+.needle {
+  position:absolute; top:0; left:50%; transform:translateX(-50%);
+  height:8px; width:8px; border-radius:50%; background:var(--green);
+}
+.meter-labels { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); }
+.status { text-align:center; font-weight:bold; margin:14px 0; }
+.good { color:var(--green); }
+.bad { color:#ffe09a; }
+.strings { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:15px 0; }
+.string-btn {
+  background:#232330; color:white; border:1px solid var(--line);
+  border-radius:10px; padding:11px 5px;
+}
+.string-btn strong { display:block; font-size:18px; }
+.string-btn span { font-size:11px; color:var(--muted); }
+.string-btn.active { border-color:var(--green); color:var(--green); }
+.progress { background:#30303e; height:8px; border-radius:10px; overflow:hidden; }
+.progress div { background:var(--green); height:100%; width:0; }
+.lesson {
+  display:flex; align-items:center; gap:12px; padding:13px;
+  margin:9px 0; border:1px solid var(--line);
+  border-radius:13px; background:#1b1b26;
+}
+.lesson .number {
+  background:#302b46; color:var(--purple); border-radius:10px;
+  padding:9px 12px; font-weight:bold;
+}
+.lesson .info { flex:1; }
+.lesson h3 { margin:0; font-size:14px; }
+.lesson p { margin:3px 0 0; font-size:12px; }
+.toast {
+  display:none; position:fixed; bottom:18px; left:50%;
+  transform:translateX(-50%); background:var(--green);
+  color:#111; padding:12px 18px; border-radius:12px;
+  font-weight:bold; z-index:10; max-width:90%;
+}
+footer { color:#77778a; text-align:center; font-size:11px; margin-top:30px; }
+@media(max-width:700px) {
+  .app { padding:15px 12px 35px; }
+  .hero { grid-template-columns:1fr; padding:20px; }
+  .hero-art { min-height:100px; font-size:60px; order:-1; }
+  .grid,.tuner-grid { grid-template-columns:1fr; }
+  .card,.panel { padding:15px; }
+  h1 { font-size:17px; }
+  .xp { font-size:12px; }
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<header>
+  <div class="brand">
+    <div class="logo">♫</div>
+    <div>
+      <h1>GUITAR QUEST</h1>
+      <div class="subtitle">ギター練習ラボ · FIRST STEPS</div>
+    </div>
+  </div>
+  <div class="xp">LEVEL <strong id="level">1</strong><br>
+    <strong id="xp">0</strong> XP
+  </div>
+</header>
+
+<nav>
+  <button class="active" data-page="home">⌂ ホーム</button>
+  <button data-page="tuner">♫ チューナー</button>
+  <button data-page="challenge">◎ 音程練習</button>
+  <button data-page="lessons">▤ レッスン</button>
+  <button data-page="progress">✦ 成長記録</button>
+</nav>
+
+<!-- ホーム -->
+<section class="view active" id="home">
+  <div class="hero">
+    <div>
+      <div class="eyebrow">YOUR MUSIC JOURNEY STARTS HERE</div>
+      <h2>昨日より、<br>いい音を。</h2>
+      <p>ギター初心者のための練習スペース。まずは1本の弦を鳴らすところから始めよう。</p>
+      <button class="primary" data-go="challenge">練習を始める →</button>
+    </div>
+    <div class="hero-art">🎸</div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="emoji">🎯</div><h3>今日のミッション</h3>
+      <p>弦を1本ずつ鳴らして音程をチェック。</p>
+      <button class="secondary" data-go="tuner">チューナーを開く</button>
+    </div>
+    <div class="card">
+      <div class="emoji">📚</div><h3>初心者レッスン</h3>
+      <p>ギターの基本や弦の名前を学ぼう。</p>
+      <button class="secondary" data-go="lessons">学習を始める</button>
+    </div>
+    <div class="card">
+      <div class="emoji">⚡</div><h3>成長記録</h3>
+      <p>経験値やクリアした弦を確認しよう。</p>
+      <button class="secondary" data-go="progress">記録を見る</button>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <h2>開放弦チャレンジ</h2>
+    <span class="small muted" id="home-count">0 / 6 弦</span>
+  </div>
+  <div class="card">
+    <div class="row between"><strong>今日の進捗</strong><span id="percent">0%</span></div>
+    <div class="progress" style="margin-top:12px"><div id="home-bar"></div></div>
+  </div>
+</section>
+
+<!-- チューナー -->
+<section class="view" id="tuner">
+  <div class="section-head"><h2>クロマチック・チューナー</h2><span class="small">LIVE AUDIO</span></div>
+  <div class="tuner-grid">
+    <div class="panel">
+      <div class="row between">
+        <strong>マイク入力</strong><span id="mic-state" class="small muted">未接続</span>
+      </div>
+      <p class="small">静かな場所で弦を1本だけ弾いてね。マイクの使用許可が必要だよ。</p>
+      <div class="row">
+        <button class="primary" id="start-mic">マイクを開始</button>
+        <button class="secondary" id="stop-mic" disabled>停止</button>
+      </div>
+      <div class="section-head"><h2 style="font-size:15px">練習する弦</h2></div>
+      <div class="strings" id="string-buttons"></div>
+      <p class="small muted">標準チューニング：6弦 E2 / 5弦 A2 / 4弦 D3 / 3弦 G3 / 2弦 B3 / 1弦 E4</p>
+    </div>
+
+    <div class="panel">
+      <div class="eyebrow" style="text-align:center">DETECTED NOTE</div>
+      <div class="note" id="note">—</div>
+      <div class="freq" id="frequency">音を待っています</div>
+      <div class="meter"><div class="needle" id="needle"></div></div>
+      <div class="meter-labels"><span>低い ♭</span><span>ぴったり</span><span>高い ♯</span></div>
+      <div class="status" id="status">マイクを開始してください</div>
+      <p class="small muted">音程は目安です。周囲の音やマイクの性能で判定が変わることがあります。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 音程チャレンジ -->
+<section class="view" id="challenge">
+  <div class="section-head"><h2>単音チャレンジ</h2><span class="small">MISSION 01</span></div>
+  <div class="panel">
+    <div class="eyebrow">TARGET STRING</div>
+    <h2 id="target-title">6弦 E2</h2>
+    <p id="target-hz">82.4 Hz を目指そう</p>
+    <p>目標の弦を選び、マイクで音を確認しよう。正しい音程が安定して検出されるとクリアになるよ。</p>
+    <button class="primary" data-go="tuner">チューナーを開く</button>
+    <div class="section-head"><h2 style="font-size:16px">クリア状況</h2><span id="challenge-count" class="small">0 / 6</span></div>
+    <div class="progress"><div id="challenge-bar"></div></div>
+    <div class="strings" id="challenge-strings"></div>
+    <p class="small muted">この試作版は単音判定のみ。コード全体やリズムの正確さはまだ判定しません。</p>
+  </div>
+</section>
+
+<!-- レッスン -->
+<section class="view" id="lessons">
+  <div class="section-head"><h2>初心者レッスン</h2><span class="small">START FROM ZERO</span></div>
+  <div id="lesson-list"></div>
+  <div class="panel" style="margin-top:15px">
+    <div class="eyebrow">LESSON GUIDE</div>
+    <h2 id="lesson-title">ギターを知ろう</h2>
+    <p id="lesson-body">ギターは弦の振動で音を出す楽器です。無理のない姿勢で持ち、弦を1本ずつ鳴らしてみましょう。</p>
+    <button class="primary" id="complete-lesson">レッスン完了 ＋20 XP</button>
+  </div>
+</section>
+
+<!-- 成長記録 -->
+<section class="view" id="progress">
+  <div class="section-head"><h2>成長記録</h2><span class="small">YOUR PROGRESS</span></div>
+  <div class="grid">
+    <div class="card"><div class="small muted">EXPERIENCE</div><h2><span id="total-xp">0</span> XP</h2></div>
+    <div class="card"><div class="small muted">LEVEL</div><h2 id="total-level">1</h2></div>
+    <div class="card"><div class="small muted">CLEARED STRINGS</div><h2><span id="cleared-count">0</span> / 6</h2></div>
+  </div>
+  <div class="section-head"><h2>弦ごとの達成状況</h2></div>
+  <div class="panel" id="progress-list"></div>
+  <p class="small muted">記録はこのブラウザ内に保存されます。ブラウザのデータを消すと消える場合があります。</p>
+  <button class="secondary" id="reset">記録をリセット</button>
+</section>
+
+<footer>GUITAR QUEST · PROTOTYPE 0.1 · 音声は端末内で処理</footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { PitchDetector } from "https://esm.sh/pitchy@4.1.0";
+
+const strings = [
+  {n:6,name:"E2",hz:82.41},
+  {n:5,name:"A2",hz:110.00},
+  {n:4,name:"D3",hz:146.83},
+  {n:3,name:"G3",hz:196.00},
+  {n:2,name:"B3",hz:246.94},
+  {n:1,name:"E4",hz:329.63}
+];
+
+const lessons = [
+  {
+    title:"ギターを知ろう",
+    sub:"ギターの持ち方・パーツ",
+    body:"ギターは弦の振動で音を出します。ヘッドのペグで弦の張りを調整し、ネックのフレットで音の高さを変えます。無理のない姿勢で持ち、弦を1本ずつ鳴らしてみましょう。"
+  },
+  {
+    title:"6本の弦を覚えよう",
+    sub:"標準チューニング E-A-D-G-B-E",
+    body:"標準チューニングは、太い6弦から E2・A2・D3・G3・B3・E4。低い音から「ミ・ラ・レ・ソ・シ・ミ」です。チューナー画面で弦を1本ずつ確かめましょう。"
+  },
+  {
+    title:"チューニングの基本",
+    sub:"目標の音に合わせる",
+    body:"弦を1本だけ弾き、チューナーが示す音名を確認します。音が低い場合は少しずつ張り、高い場合は少しずつ緩めます。ペグを急に大きく回さないようにしましょう。"
+  },
+  {
+    title:"ピックで弦を鳴らす",
+    sub:"力を抜いてゆっくり",
+    body:"ピックは強く握り込まず、先端を少しだけ出して持ちます。まずは1本の弦をゆっくり弾き、音がきれいに伸びるか聴いてみましょう。"
+  },
+  {
+    title:"コードってなに？",
+    sub:"複数の音を組み合わせる",
+    body:"コードは複数の音を組み合わせた響きです。C・G・Amなどは指の形を覚えることから始めます。この試作版ではコードの自動判定にはまだ対応していません。"
+  }
+];
+
+const $ = id => document.getElementById(id);
+const defaultState = {xp:0,cleared:[],lessons:[],selected:0};
+
+let state;
+try {
+  state = {...defaultState,...JSON.parse(localStorage.getItem("guitarQuestState") || "{}")};
+} catch {
+  state = {...defaultState};
+}
+if (!Array.isArray(state.cleared)) state.cleared=[];
+if (!Array.isArray(state.lessons)) state.lessons=[];
+
+let selected = Math.max(0,Math.min(5,Number(state.selected)||0));
+let currentLesson=0;
+let audioContext=null,stream=null,source=null,analyser=null;
+let detector=null,buffer=null,raf=null;
+let stableHits=0,lastNote="",lastSuccessAt=0;
+
+function save() {
+  state.selected=selected;
+  try { localStorage.setItem("guitarQuestState",JSON.stringify(state)); } catch {}
+  renderStats();
+}
+
+function notify(message) {
+  $("toast").textContent=message;
+  $("toast").style.display="block";
+  clearTimeout(notify.timer);
+  notify.timer=setTimeout(()=>$("toast").style.display="none",2300);
+}
+
+function level() { return Math.floor(state.xp/100)+1; }
+
+function showPage(id) {
+  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===id));
+  document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+  if(id==="tuner") renderStrings();
+}
+
+document.querySelectorAll("[data-page]").forEach(b=>{
+  b.addEventListener("click",()=>showPage(b.dataset.page));
+});
+document.querySelectorAll("[data-go]").forEach(b=>{
+  b.addEventListener("click",()=>showPage(b.dataset.go));
+});
+
+function renderStats() {
+  $("xp").textContent=state.xp;
+  $("level").textContent=level();
+  $("total-xp").textContent=state.xp;
+  $("total-level").textContent=level();
+  $("cleared-count").textContent=state.cleared.length;
+  $("challenge-count").textContent=state.cleared.length+" / 6";
+  $("challenge-bar").style.width=(state.cleared.length/6*100)+"%";
+  $("home-count").textContent=state.cleared.length+" / 6 弦";
+  $("percent").textContent=Math.round(state.cleared.length/6*100)+"%";
+  $("home-bar").style.width=(state.cleared.length/6*100)+"%";
+
+  $("challenge-strings").innerHTML=strings.map((s,i)=>`
+    <button class="string-btn ${state.cleared.includes(s.n)?"active":""}" data-string="${i}">
+      <strong>${s.n}弦</strong>
+      <span>${s.name} ${state.cleared.includes(s.n)?"✓":"未達成"}</span>
+    </button>`).join("");
+
+  $("progress-list").innerHTML=strings.map(s=>`
+    <div class="row between" style="padding:10px 0;border-bottom:1px solid var(--line)">
+      <strong>${s.n}弦 ${s.name}</strong>
+      <span class="${state.cleared.includes(s.n)?"good":"muted"}">
+        ${state.cleared.includes(s.n)?"✓ クリア":"未達成"}
+      </span>
+    </div>`).join("");
+}
+
+function renderStrings() {
+  const s=strings[selected];
+  $("target-title").textContent=s.n+"弦 "+s.name;
+  $("target-hz").textContent=s.hz.toFixed(1)+" Hz を目指そう";
+  $("string-buttons").innerHTML=strings.map((x,i)=>`
+    <button class="string-btn ${i===selected?"active":""}" data-string="${i}">
+      <strong>${x.n}弦</strong><span>${x.name}</span>
+    </button>`).join("");
+}
+
+document.addEventListener("click",e=>{
+  const button=e.target.closest("[data-string]");
+  if(!button)return;
+  selected=Number(button.dataset.string);
+  save();
+  renderStrings();
+});
+
+$("lesson-list").innerHTML=lessons.map((l,i)=>`
+  <div class="lesson">
+    <div class="number">${String(i+1).padStart(2,"0")}</div>
+    <div class="info"><h3>${l.title}</h3><p>${l.sub}</p></div>
+    <button class="secondary" data-lesson="${i}">
+      ${state.lessons.includes(i)?"復習":"学ぶ"}
+    </button>
+  </div>`).join("");
+
+function openLesson(i) {
+  currentLesson=i;
+  $("lesson-title").textContent=lessons[i].title;
+  $("lesson-body").textContent=lessons[i].body;
+  $("complete-lesson").textContent=
+    state.lessons.includes(i)?"復習完了":"レッスン完了 ＋20 XP";
+}
+
+$("lesson-list").addEventListener("click",e=>{
+  const button=e.target.closest("[data-lesson]");
+  if(!button)return;
+  openLesson(Number(button.dataset.lesson));
+  $("lesson-body").scrollIntoView({behavior:"smooth",block:"center"});
+});
+
+$("complete-lesson").addEventListener("click",()=>{
+  if(!state.lessons.includes(currentLesson)) {
+    state.lessons.push(currentLesson);
+    state.xp+=20;
+    save();
+    notify("レッスンクリア！ +20 XP");
+  } else {
+    notify("復習できたね！");
+  }
+  $("complete-lesson").textContent="復習完了";
+});
+
+function noteFromFrequency(freq) {
+  const midi=Math.round(69+12*Math.log2(freq/440));
+  const names=["C","C♯","D","D♯","E","F","F♯","G","G♯","A","A♯","B"];
+  const name=names[(midi%12+12)%12]+(Math.floor(midi/12)-1);
+  const exact=440*Math.pow(2,(midi-69)/12);
+  return {midi,name,cents:1200*Math.log2(freq/exact)};
+}
+
+function updatePitch(freq,clarity) {
+  if(!Number.isFinite(freq)||freq<55||freq>1000||clarity<0.88) {
+    $("note").textContent="—";
+    $("frequency").textContent="音をはっきり検出できません";
+    $("status").textContent="弦を1本だけ、もう一度弾いてみて";
+    $("status").className="status bad";
+    stableHits=0;
+    return;
+  }
+
+  const note=noteFromFrequency(freq);
+  $("note").textContent=note.name;
+  $("frequency").textContent=
+    freq.toFixed(1)+" Hz · "+(note.cents>0?"+":"")+note.cents.toFixed(0)+" cents";
+  $("needle").style.left=(50+Math.max(-45,Math.min(45,note.cents)))+"%";
+
+  const target=strings[selected];
+  const targetMidi=Math.round(69+12*Math.log2(target.hz/440));
+
+  if(note.midi===targetMidi && Math.abs(note.cents)<=8) {
+    $("status").textContent="ぴったり！ いい音！";
+    $("status").className="status good";
+
+    if(lastNote===note.name) stableHits++;
+    else stableHits=0;
+    lastNote=note.name;
+
+    if(stableHits>=5 && Date.now()-lastSuccessAt>3500 &&
+       !state.cleared.includes(target.n)) {
+      state.cleared.push(target.n);
+      state.xp+=10;
+      lastSuccessAt=Date.now();
+      stableHits=0;
+      save();
+      notify(target.n+"弦クリア！ +10 XP");
+    }
+  } else {
+    stableHits=0;
+    lastNote="";
+    if(note.midi===targetMidi) {
+      $("status").textContent=note.cents<0?"少し高くしてみよう":"少し低くしてみよう";
+    } else if(note.midi<targetMidi) {
+      $("status").textContent="目標より低い音です";
+    } else {
+      $("status").textContent="目標より高い音です";
+    }
+    $("status").className="status bad";
+  }
+}
+
+async function startMic() {
+  try {
+    if(!navigator.mediaDevices?.getUserMedia) {
+      throw new Error("マイクが使えません。GitHub PagesのHTTPSページを開いてください。");
+    }
+
+    stream=await navigator.mediaDevices.getUserMedia({
+      audio:{
+        echoCancellation:false,
+        noiseSuppression:false,
+        autoGainControl:false
+      },
+      video:false
+    });
+
+    audioContext=new (window.AudioContext||window.webkitAudioContext)();
+    await audioContext.resume();
+
+    source=audioContext.createMediaStreamSource(stream);
+    analyser=audioContext.createAnalyser();
+    analyser.fftSize=4096;
+    analyser.smoothingTimeConstant=0.05;
+    source.connect(analyser);
+
+    buffer=new Float32Array(4096);
+    detector=PitchDetector.forFloat32Array(4096);
+
+    $("mic-state").textContent="マイク接続中";
+    $("mic-state").style.color="var(--green)";
+    $("start-mic").disabled=true;
+    $("stop-mic").disabled=false;
+    $("status").textContent="弦を1本だけ弾いてください";
+
+    function tick() {
+      if(!analyser||!detector||!audioContext)return;
+
+      analyser.getFloatTimeDomainData(buffer);
+      let sum=0;
+      for(let i=0;i<buffer.length;i++)sum+=buffer[i]*buffer[i];
+      const rms=Math.sqrt(sum/buffer.length);
+
+      if(rms>0.008) {
+        const [freq,clarity]=detector.findPitch(buffer,audioContext.sampleRate);
+        updatePitch(freq,clarity);
+      } else {
+        $("note").textContent="—";
+        $("frequency").textContent="音を待っています";
+        $("status").textContent="弦を1本だけ弾いてください";
+        $("status").className="status";
+      }
+      raf=requestAnimationFrame(tick);
+    }
+    tick();
+  } catch(err) {
+    notify(err.message||"マイクを開始できませんでした");
+    $("mic-state").textContent="未接続";
+    $("status").textContent="マイクの許可とブラウザ設定を確認してください";
+    $("status").className="status bad";
+    stopMic();
+  }
+}
+
+function stopMic() {
+  if(raf)cancelAnimationFrame(raf);
+  raf=null;
+  if(stream)stream.getTracks().forEach(t=>t.stop());
+  stream=null;
+  if(audioContext)audioContext.close().catch(()=>{});
+  audioContext=null;
+  source=null;
+  analyser=null;
+  detector=null;
+  buffer=null;
+
+  $("mic-state").textContent="未接続";
+  $("mic-state").style.color="";
+  $("start-mic").disabled=false;
+  $("stop-mic").disabled=true;
+  $("note").textContent="—";
+  $("frequency").textContent="音を待っています";
+  $("status").textContent="マイクを開始してください";
+  $("status").className="status";
+  $("needle").style.left="50%";
+  stableHits=0;
+  lastNote="";
+}
+
+$("start-mic").addEventListener("click",startMic);
+$("stop-mic").addEventListener("click",stopMic);
+
+$("reset").addEventListener("click",()=>{
+  if(!confirm("経験値と練習記録をすべてリセットしますか？"))return;
+  stopMic();
+  state={...defaultState,cleared:[],lessons:[]};
+  selected=0;
+  save();
+  renderStrings();
+  notify("記録をリセットしました");
+});
+
+window.addEventListener("pagehide",stopMic);
+
+renderStats();
+renderStrings();
+openLesson(0);
+</script>
+</body>
+</html>
