@@ -303,6 +303,189 @@ footer { color:#77778a; text-align:center; font-size:11px; margin-top:30px; }
   .chord-options { grid-template-columns:repeat(3,minmax(0,1fr)); }
 }
 
+/* ===== 全端末対応：Guitar Quest Responsive ===== */
+
+/* 画面幅に合わせて図やパネルを縮小 */
+.app,
+.view,
+.panel,
+.card,
+.guitar-diagram,
+.fretboard-wrap {
+  min-width: 0;
+  max-width: 100%;
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+/* 練習メニューを押しやすくする */
+button,
+select {
+  min-height: 42px;
+  max-width: 100%;
+}
+
+button {
+  touch-action: manipulation;
+}
+
+/* コード図：中央に配置して画面からはみ出さない */
+#chord-diagram {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+#chord-diagram svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+/* 単音練習：ギター図を画面幅に合わせる */
+.fretboard-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#fretboard {
+  width: 100%;
+}
+
+#fretboard svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* コード・単音・音程チェックの切替ボタン */
+.practice-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.practice-tabs button {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* メニューを横スクロールできるようにする */
+nav {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+nav button {
+  flex-shrink: 0;
+}
+
+/* タブレット */
+@media (min-width: 701px) and (max-width: 1024px) {
+  .app {
+    padding: 20px 18px 40px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tuner-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .chord-options {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+/* スマホ */
+@media (max-width: 700px) {
+  .app {
+    padding: 12px 10px 30px;
+  }
+
+  header {
+    gap: 8px;
+  }
+
+  .brand {
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .logo {
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+  }
+
+  .xp {
+    padding: 6px 9px;
+    font-size: 11px;
+  }
+
+  .practice-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .practice-tabs button {
+    width: 100%;
+  }
+
+  .chord-options {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .guitar-diagram,
+  .fretboard-wrap {
+    padding: 8px;
+  }
+
+  .step-item {
+    overflow-wrap: anywhere;
+  }
+
+  .section-head {
+    flex-wrap: wrap;
+  }
+
+  .note-result strong {
+    font-size: 28px;
+  }
+}
+
+/* 小型スマホ */
+@media (max-width: 380px) {
+  h1 {
+    font-size: 15px;
+  }
+
+  .subtitle {
+    font-size: 10px;
+  }
+
+  .xp {
+    font-size: 10px;
+    padding: 5px 7px;
+  }
+
+  .card,
+  .panel {
+    padding: 12px;
+  }
+
+  .chord-option {
+    padding: 9px 3px;
+  }
+}
+
 </style>
 </head>
 
