@@ -1,0 +1,507 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0b10">
+<title>練習メニュー編集 | Guitar Quest</title>
+
+<style>
+:root {
+  --bg:#0b0b10;
+  --panel:#161620;
+  --line:#30303e;
+  --text:#f5f5fa;
+  --muted:#a4a4b5;
+  --green:#9af5c2;
+  --purple:#b7a4ff;
+  --red:#ff9696;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:radial-gradient(ellipse at top right,#292443,var(--bg) 50%);
+  color:var(--text);
+  font:15px/1.65 system-ui,sans-serif;
+}
+button,input,textarea { font:inherit; }
+button { cursor:pointer; }
+button:disabled { opacity:.4; cursor:not-allowed; }
+.app { max-width:850px; margin:auto; padding:22px 16px 45px; }
+
+header { display:flex; align-items:center; gap:11px; }
+.logo {
+  width:44px; height:44px; display:grid; place-items:center;
+  background:var(--green); color:#111; border-radius:13px; font-size:25px;
+}
+h1 { margin:0; font-size:20px; }
+.subtitle { color:var(--muted); font-size:12px; }
+
+.nav { display:flex; flex-wrap:wrap; gap:8px; margin:20px 0; }
+.btn {
+  display:inline-flex; justify-content:center; align-items:center;
+  padding:10px 14px; border-radius:11px; font-weight:650;
+  text-decoration:none; border:1px solid var(--line);
+}
+.primary { background:var(--green); color:#101016; border-color:var(--green); }
+.secondary { background:#252532; color:var(--text); }
+.danger { background:#351e26; color:var(--red); border-color:#65303d; }
+.small-btn { padding:6px 10px; font-size:13px; }
+
+.hero,.panel {
+  border:1px solid var(--line); border-radius:18px;
+  background:var(--panel); padding:19px; margin-bottom:15px;
+}
+.hero { background:linear-gradient(125deg,#202032,#151b21); }
+.eyebrow { color:var(--green); font-size:11px; letter-spacing:1.5px; font-weight:bold; }
+h2 { font-size:22px; line-height:1.35; margin:7px 0; }
+h3 { font-size:16px; margin:0 0 12px; }
+p { color:var(--muted); }
+.hero p { margin-bottom:0; }
+
+.stats { display:flex; gap:10px; flex-wrap:wrap; margin-top:15px; }
+.stat { background:#111119; border:1px solid var(--line); padding:9px 12px; border-radius:10px; }
+.stat span { color:var(--muted); font-size:12px; }
+.stat strong { margin-left:7px; }
+
+.field { display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
+label { font-weight:650; font-size:13px; }
+input[type="text"],input[type="number"],textarea {
+  width:100%; border:1px solid var(--line); border-radius:10px;
+  padding:11px 12px; background:#101018; color:var(--text);
+  outline:none;
+}
+input:focus,textarea:focus { border-color:var(--purple); }
+textarea { min-height:95px; resize:vertical; }
+input[type="number"] { max-width:180px; }
+.help { font-size:12px; color:var(--muted); margin-top:3px; }
+
+.task-list { display:flex; flex-direction:column; gap:11px; }
+.task {
+  background:var(--panel); border:1px solid var(--line);
+  border-radius:15px; padding:15px;
+}
+.task-top { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
+.task-name { font-weight:750; overflow-wrap:anywhere; }
+.task-time { font-size:12px; color:var(--purple); background:#29283a; padding:4px 9px; border-radius:8px; white-space:nowrap; }
+.task-desc { font-size:13px; color:var(--muted); white-space:pre-wrap; overflow-wrap:anywhere; margin:8px 0; }
+.task-actions { display:flex; flex-wrap:wrap; gap:7px; margin-top:12px; }
+.empty { text-align:center; padding:25px; border:1px dashed var(--line); border-radius:13px; color:var(--muted); }
+.form-actions { display:flex; flex-wrap:wrap; gap:9px; margin-top:8px; }
+.notice { font-size:12px; color:var(--muted); margin-top:12px; }
+footer { text-align:center; color:#77778a; font-size:11px; margin-top:30px; }
+.toast {
+  display:none; position:fixed; bottom:18px; left:50%; transform:translateX(-50%);
+  background:var(--green); color:#111; padding:12px 18px;
+  border-radius:12px; font-weight:bold; max-width:90%; z-index:10;
+}
+@media(max-width:550px) {
+  .app { padding:15px 12px 35px; }
+  .hero,.panel { padding:15px; }
+  h1 { font-size:17px; }
+  h2 { font-size:20px; }
+  .task { padding:12px; }
+  .task-top { align-items:flex-start; }
+  .btn { padding:9px 11px; }
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<header>
+  <div class="logo">♫</div>
+  <div>
+    <h1>GUITAR QUEST</h1>
+    <div class="subtitle">練習メニュー編集 · EDIT PRACTICE</div>
+  </div>
+</header>
+
+<div class="nav">
+  <a class="btn secondary" href="index.html">← ホーム</a>
+  <a class="btn secondary" href="practice.html">今日の練習を見る →</a>
+</div>
+
+<section class="hero">
+  <div class="eyebrow">CUSTOMIZE YOUR ROUTINE</div>
+  <h2>自分だけの練習メニューを作ろう 🎸</h2>
+  <p>練習内容や時間を自由に変更できるよ。変更はこのブラウザに保存され、練習ページにも反映されるよ。</p>
+  <div class="stats">
+    <div class="stat"><span>メニュー数</span><strong id="item-count">0</strong></div>
+    <div class="stat"><span>合計練習時間</span><strong><span id="total-time">0</span> 分</strong></div>
+  </div>
+</section>
+
+<section class="panel">
+  <h3 id="form-title">＋ 新しい練習を追加</h3>
+
+  <form id="item-form">
+    <div class="field">
+      <label for="item-name">練習メニュー名</label>
+      <input id="item-name" type="text" maxlength="80"
+        placeholder="例：Fコードの練習" required>
+    </div>
+
+    <div class="field">
+      <label for="item-minutes">練習時間（分）</label>
+      <input id="item-minutes" type="number" min="1" max="180"
+        value="5" required>
+      <div class="help">1〜180分で設定できるよ。</div>
+    </div>
+
+    <div class="field">
+      <label for="item-description">練習内容・コツ</label>
+      <textarea id="item-description" maxlength="1000"
+        placeholder="例：ゆっくりコードを押さえ、弦を1本ずつ鳴らして確認する。"></textarea>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn primary" id="submit-button" type="submit">メニューを追加</button>
+      <button class="btn secondary" id="cancel-button" type="button" hidden>編集をキャンセル</button>
+    </div>
+  </form>
+
+  <div class="notice">💡 例：ウォームアップ、コード練習、好きな曲の練習など。自分のレベルに合わせて作ってね。</div>
+</section>
+
+<section>
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin:23px 0 12px">
+    <h2 style="font-size:19px;margin:0">登録済みメニュー</h2>
+    <button class="btn secondary small-btn" id="restore-button" type="button">初期設定に戻す</button>
+  </div>
+
+  <div id="task-list" class="task-list"></div>
+  <p class="help">↑ ↓ で順番を変更できるよ。削除すると、その項目の完了チェックも解除されるよ。</p>
+</section>
+
+<footer>GUITAR QUEST · EDIT PRACTICE</footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+const STORAGE_KEY = "guitarQuestPractice";
+
+const defaultItems = [
+  {
+    id:"warmup",
+    title:"① ウォームアップ",
+    minutes:3,
+    description:"1〜4フレットを使って、指を1本ずつ動かそう。\nゆっくり、音がきれいに出ることを意識する。"
+  },
+  {
+    id:"chords",
+    title:"② コード練習",
+    minutes:5,
+    description:"Em・Amから始めよう。慣れてきたらC・G・Dにも挑戦。\n指がほかの弦に触れていないか確認しよう。"
+  },
+  {
+    id:"rhythm",
+    title:"③ リズム・ストローク",
+    minutes:3,
+    description:"最初はゆっくり下向きに弾く。\n慣れたらダウン・アップを交互に繰り返そう。"
+  },
+  {
+    id:"single-note",
+    title:"④ 単音・指の練習",
+    minutes:4,
+    description:"弦を1本ずつ弾いて、音をはっきり出そう。\nチューナーで開放弦の音程を確かめよう。"
+  },
+  {
+    id:"free-play",
+    title:"⑤ 好きな曲・自由練習",
+    minutes:5,
+    description:"好きな曲の一部分や、覚えたコードを練習しよう。\n難しいところは短く区切って繰り返そう。"
+  }
+];
+
+const $ = id => document.getElementById(id);
+
+let data = loadData();
+let editingId = null;
+
+function cloneDefaults() {
+  return defaultItems.map(item => ({...item}));
+}
+
+function loadData() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+
+    if (!saved || !Array.isArray(saved.items)) {
+      return {items:cloneDefaults(), checked:[], checkDate:todayKey()};
+    }
+
+    return {
+      items:saved.items.map((item,index) => ({
+        id:String(item.id || makeId()),
+        title:String(item.title || `練習 ${index+1}`),
+        minutes:Math.max(1,Math.min(180,Number(item.minutes)||5)),
+        description:String(item.description || "")
+      })),
+      checked:Array.isArray(saved.checked) ? saved.checked.map(String) : [],
+      checkDate:saved.checkDate || todayKey()
+    };
+  } catch {
+    return {items:cloneDefaults(), checked:[], checkDate:todayKey()};
+  }
+}
+
+function todayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+
+function makeId() {
+  return "practice-" + Date.now().toString(36) + "-" +
+    Math.random().toString(36).slice(2,8);
+}
+
+function saveData() {
+  try {
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+    return true;
+  } catch {
+    showToast("保存できませんでした。ブラウザの設定を確認してね。");
+    return false;
+  }
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g,ch => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[ch]);
+}
+
+function render() {
+  const list = $("task-list");
+  const totalMinutes = data.items.reduce((sum,item) => sum + item.minutes,0);
+
+  $("item-count").textContent = data.items.length;
+  $("total-time").textContent = totalMinutes;
+
+  if (data.items.length === 0) {
+    list.innerHTML = `
+      <div class="empty">
+        メニューはまだ登録されていないよ。<br>
+        上のフォームから新しく追加してね。
+      </div>`;
+    return;
+  }
+
+  list.innerHTML = data.items.map((item,index) => `
+    <article class="task">
+      <div class="task-top">
+        <div class="task-name">${escapeHTML(item.title)}</div>
+        <span class="task-time">${item.minutes}分</span>
+      </div>
+
+      <div class="task-desc">${escapeHTML(item.description || "説明なし")}</div>
+
+      <div class="task-actions">
+        <button class="btn secondary small-btn" type="button"
+          data-action="up" data-id="${escapeHTML(item.id)}"
+          ${index===0 ? "disabled" : ""}>↑ 上へ</button>
+
+        <button class="btn secondary small-btn" type="button"
+          data-action="down" data-id="${escapeHTML(item.id)}"
+          ${index===data.items.length-1 ? "disabled" : ""}>↓ 下へ</button>
+
+        <button class="btn secondary small-btn" type="button"
+          data-action="edit" data-id="${escapeHTML(item.id)}">✏ 編集</button>
+
+        <button class="btn danger small-btn" type="button"
+          data-action="delete" data-id="${escapeHTML(item.id)}">削除</button>
+      </div>
+    </article>
+  `).join("");
+}
+
+function resetForm() {
+  editingId = null;
+  $("item-form").reset();
+  $("item-minutes").value = 5;
+  $("form-title").textContent = "＋ 新しい練習を追加";
+  $("submit-button").textContent = "メニューを追加";
+  $("cancel-button").hidden = true;
+}
+
+function startEdit(id) {
+  const item = data.items.find(entry => entry.id === id);
+  if (!item) return;
+
+  editingId = id;
+  $("item-name").value = item.title;
+  $("item-minutes").value = item.minutes;
+  $("item-description").value = item.description;
+
+  $("form-title").textContent = "✏ 練習メニューを編集";
+  $("submit-button").textContent = "変更を保存";
+  $("cancel-button").hidden = false;
+
+  $("form-title").scrollIntoView({behavior:"smooth",block:"center"});
+  $("item-name").focus({preventScroll:true});
+}
+
+$("item-form").addEventListener("submit",event => {
+  event.preventDefault();
+
+  const title = $("item-name").value.trim();
+  const minutes = Number($("item-minutes").value);
+  const description = $("item-description").value.trim();
+
+  if (!title) {
+    showToast("メニュー名を入力してね。");
+    $("item-name").focus();
+    return;
+  }
+
+  if (!Number.isInteger(minutes) || minutes < 1 || minutes > 180) {
+    showToast("練習時間は1〜180分で入力してね。");
+    $("item-minutes").focus();
+    return;
+  }
+
+  if (editingId !== null) {
+    const index = data.items.findIndex(item => item.id === editingId);
+    if (index === -1) {
+      showToast("編集対象が見つからなかったよ。");
+      resetForm();
+      return;
+    }
+
+    data.items[index] = {
+      ...data.items[index],
+      title,
+      minutes,
+      description
+    };
+
+    if (!saveData()) return;
+    resetForm();
+    render();
+    showToast("変更を保存したよ！");
+  } else {
+    const newItem = {
+      id:makeId(),
+      title,
+      minutes,
+      description
+    };
+
+    data.items.push(newItem);
+
+    if (!saveData()) {
+      data.items.pop();
+      return;
+    }
+
+    resetForm();
+    render();
+    showToast("練習メニューを追加したよ！");
+  }
+});
+
+$("cancel-button").addEventListener("click",() => {
+  resetForm();
+  showToast("編集をキャンセルしたよ。");
+});
+
+$("task-list").addEventListener("click",event => {
+  const button = event.target.closest("button[data-action]");
+  if (!button) return;
+
+  const {action,id} = button.dataset;
+  const index = data.items.findIndex(item => item.id === id);
+  if (index === -1) return;
+
+  if (action === "edit") {
+    startEdit(id);
+    return;
+  }
+
+  if (action === "delete") {
+    const item = data.items[index];
+
+    if (!confirm(`「${item.title}」を削除する？`)) return;
+
+    const oldItems = [...data.items];
+    const oldChecked = [...data.checked];
+
+    data.items.splice(index,1);
+    data.checked = data.checked.filter(checkedId => checkedId !== id);
+
+    if (!saveData()) {
+      data.items = oldItems;
+      data.checked = oldChecked;
+      return;
+    }
+
+    if (editingId === id) resetForm();
+    render();
+    showToast("メニューを削除したよ。");
+    return;
+  }
+
+  if (action === "up" && index > 0) {
+    [data.items[index-1],data.items[index]] =
+      [data.items[index],data.items[index-1]];
+  } else if (action === "down" && index < data.items.length-1) {
+    [data.items[index+1],data.items[index]] =
+      [data.items[index],data.items[index+1]];
+  } else {
+    return;
+  }
+
+  if (!saveData()) {
+    // 保存に失敗した場合はページを再読み込みせず、現在の操作を通知する。
+    showToast("保存に失敗した可能性があるよ。");
+    return;
+  }
+
+  render();
+});
+
+$("restore-button").addEventListener("click",() => {
+  if (!confirm("練習メニューを初期設定に戻す？\n現在のメニューは置き換わるよ。")) return;
+
+  const previousItems = data.items;
+  const previousChecked = data.checked;
+
+  data.items = cloneDefaults();
+  data.checked = [];
+  data.checkDate = todayKey();
+
+  if (!saveData()) {
+    data.items = previousItems;
+    data.checked = previousChecked;
+    return;
+  }
+
+  resetForm();
+  render();
+  showToast("初期設定に戻したよ！");
+});
+
+function showToast(message) {
+  const toast = $("toast");
+  toast.textContent = message;
+  toast.style.display = "block";
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(() => {
+    toast.style.display = "none";
+  },2500);
+}
+
+render();
+</script>
+</body>
+</html>
