@@ -1,0 +1,384 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0b10">
+<title>今日の練習 | Guitar Quest</title>
+
+<style>
+:root {
+  --bg:#0b0b10;
+  --panel:#161620;
+  --line:#30303e;
+  --text:#f5f5fa;
+  --muted:#a4a4b5;
+  --green:#9af5c2;
+  --purple:#b7a4ff;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:radial-gradient(ellipse at top right,#292443,var(--bg) 50%);
+  color:var(--text);
+  font:15px/1.65 system-ui,sans-serif;
+}
+button { font:inherit; cursor:pointer; }
+button:disabled { opacity:.45; cursor:not-allowed; }
+.app { max-width:850px; margin:auto; padding:22px 16px 45px; }
+header { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.brand { display:flex; align-items:center; gap:11px; }
+.logo {
+  width:44px; height:44px; display:grid; place-items:center;
+  background:var(--green); color:#111; border-radius:13px; font-size:25px;
+}
+h1 { margin:0; font-size:20px; }
+.subtitle { color:var(--muted); font-size:12px; }
+.nav { display:flex; flex-wrap:wrap; gap:8px; margin:20px 0; }
+.btn {
+  display:inline-flex; justify-content:center; align-items:center;
+  padding:10px 14px; border-radius:11px; font-weight:650;
+  text-decoration:none; border:1px solid var(--line);
+}
+.primary { background:var(--green); color:#101016; border-color:var(--green); }
+.secondary { background:#252532; color:var(--text); }
+.hero {
+  padding:23px; border-radius:20px; border:1px solid var(--line);
+  background:linear-gradient(125deg,#202032,#151b21);
+}
+.eyebrow { color:var(--green); font-size:11px; letter-spacing:1.5px; font-weight:bold; }
+h2 { font-size:25px; line-height:1.3; margin:8px 0; }
+p { color:var(--muted); }
+.stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:17px; }
+.stat { background:#191923; border:1px solid var(--line); padding:13px; border-radius:13px; }
+.stat .label { color:var(--muted); font-size:11px; }
+.stat strong { display:block; font-size:23px; margin-top:4px; }
+.progress { height:9px; background:#30303e; border-radius:9px; overflow:hidden; margin-top:12px; }
+.progress-fill { height:100%; width:0%; background:var(--green); transition:width .2s; }
+.progress-caption { display:flex; justify-content:space-between; gap:10px; margin-top:7px; font-size:12px; color:var(--muted); }
+.section-head { display:flex; justify-content:space-between; align-items:center; gap:10px; margin:25px 0 12px; }
+.section-head h2 { font-size:19px; margin:0; }
+.small { font-size:12px; color:var(--muted); }
+.task-list { display:flex; flex-direction:column; gap:11px; }
+.task {
+  display:flex; gap:13px; align-items:flex-start;
+  background:var(--panel); border:1px solid var(--line);
+  border-radius:15px; padding:15px;
+}
+.task.done { border-color:#355846; background:#151e1a; }
+.task input[type=checkbox] {
+  width:22px; height:22px; margin:3px 0 0;
+  accent-color:#9af5c2; flex-shrink:0; cursor:pointer;
+}
+.task-content { flex:1; min-width:0; }
+.task-title { font-weight:750; }
+.task.done .task-title { color:var(--green); }
+.task-desc { margin:4px 0 0; font-size:13px; color:var(--muted); white-space:pre-wrap; overflow-wrap:anywhere; }
+.task-time {
+  background:#29283a; color:var(--purple); border-radius:8px;
+  padding:4px 8px; font-size:12px; white-space:nowrap;
+}
+.tip {
+  background:#1a1a27; border:1px solid var(--line);
+  border-radius:15px; padding:16px; margin-top:16px;
+}
+.tip h3 { margin:0 0 6px; font-size:15px; }
+.tip p { margin:0; font-size:13px; }
+.empty { background:var(--panel); border:1px dashed var(--line); border-radius:15px; padding:25px; text-align:center; }
+footer { text-align:center; color:#77778a; font-size:11px; margin-top:30px; }
+.toast {
+  display:none; position:fixed; bottom:18px; left:50%; transform:translateX(-50%);
+  background:var(--green); color:#111; padding:12px 18px;
+  border-radius:12px; font-weight:bold; max-width:90%; z-index:10;
+}
+@media(max-width:550px) {
+  .app { padding:15px 12px 35px; }
+  .stats { gap:7px; }
+  .stat { padding:10px; }
+  .stat strong { font-size:19px; }
+  .hero { padding:18px; }
+  h1 { font-size:17px; }
+  .task { padding:12px; }
+  .task-time { font-size:11px; }
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<header>
+  <div class="brand">
+    <div class="logo">♫</div>
+    <div>
+      <h1>GUITAR QUEST</h1>
+      <div class="subtitle">毎日の練習 · PRACTICE MODE</div>
+    </div>
+  </div>
+</header>
+
+<div class="nav">
+  <a class="btn secondary" href="index.html">← ホームへ</a>
+  <a class="btn primary" href="edit-practice.html">⚙ メニューを編集</a>
+</div>
+
+<section class="hero">
+  <div class="eyebrow">YOUR DAILY MISSION</div>
+  <h2>今日も少しずつ、上達しよう。 🎸</h2>
+  <p>練習が終わったらチェックを入れよう。無理せず、自分のペースで大丈夫！</p>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="label">完了した項目</div>
+      <strong><span id="done-count">0</span>/<span id="total-count">0</span></strong>
+    </div>
+    <div class="stat">
+      <div class="label">練習時間の合計</div>
+      <strong><span id="total-minutes">0</span><small style="font-size:13px"> 分</small></strong>
+    </div>
+    <div class="stat">
+      <div class="label">達成率</div>
+      <strong><span id="percent">0</span><small style="font-size:13px">%</small></strong>
+    </div>
+  </div>
+
+  <div class="progress"><div class="progress-fill" id="progress-fill"></div></div>
+  <div class="progress-caption">
+    <span id="progress-message">まずは最初の練習から始めよう！</span>
+    <span id="progress-number">0%</span>
+  </div>
+</section>
+
+<div class="section-head">
+  <h2>今日の練習メニュー</h2>
+  <span class="small" id="menu-date"></span>
+</div>
+
+<div class="task-list" id="task-list"></div>
+
+<div class="tip">
+  <h3>💡 初心者へのアドバイス</h3>
+  <p>速さよりも、きれいな音を出すことを優先しよう。指先が痛いときは休憩してね。毎日長時間練習するより、短時間でも続けることが大切だよ。</p>
+</div>
+
+<div class="nav" style="margin-top:18px">
+  <button class="btn primary" id="finish-button">今日の練習を完了する</button>
+  <button class="btn secondary" id="reset-button">チェックをリセット</button>
+</div>
+
+<footer>GUITAR QUEST · PRACTICE MODE</footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = "guitarQuestPractice";
+
+const defaultItems = [
+  {
+    id:"warmup",
+    title:"① ウォームアップ",
+    minutes:3,
+    description:"1〜4フレットを使って、指を1本ずつ動かそう。\nゆっくり、音がきれいに出ることを意識する。"
+  },
+  {
+    id:"chords",
+    title:"② コード練習",
+    minutes:5,
+    description:"Em・Amから始めよう。慣れてきたらC・G・Dにも挑戦。\n指がほかの弦に触れていないか確認しよう。"
+  },
+  {
+    id:"rhythm",
+    title:"③ リズム・ストローク",
+    minutes:3,
+    description:"最初はゆっくり下向きに弾く。\n慣れたら「ダウン・アップ」を交互に繰り返そう。"
+  },
+  {
+    id:"single-note",
+    title:"④ 単音・指の練習",
+    minutes:4,
+    description:"弦を1本ずつ弾いて、音をはっきり出そう。\nチューナーで開放弦の音程を確かめよう。"
+  },
+  {
+    id:"free-play",
+    title:"⑤ 好きな曲・自由練習",
+    minutes:5,
+    description:"好きな曲の一部分や、覚えたコードを練習しよう。\n難しいところは短く区切って繰り返そう。"
+  }
+];
+
+const $ = id => document.getElementById(id);
+let data = loadData();
+
+function loadData() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+    if (!saved || !Array.isArray(saved.items)) {
+      return {
+        items: structuredClone(defaultItems),
+        checked: [],
+        checkDate: todayKey()
+      };
+    }
+
+    return {
+      items: saved.items,
+      checked: Array.isArray(saved.checked) ? saved.checked : [],
+      checkDate: saved.checkDate || todayKey()
+    };
+  } catch {
+    return {
+      items: structuredClone(defaultItems),
+      checked: [],
+      checkDate: todayKey()
+    };
+  }
+}
+
+function todayKey() {
+  const d = new Date();
+  const year = d.getFullYear();
+  const month = String(d.getMonth()+1).padStart(2,"0");
+  const day = String(d.getDate()).padStart(2,"0");
+  return `${year}-${month}-${day}`;
+}
+
+function saveData() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch {
+    showToast("保存できませんでした。ブラウザの設定を確認してね。");
+  }
+}
+
+function resetForNewDay() {
+  const today = todayKey();
+  if (data.checkDate !== today) {
+    data.checkDate = today;
+    data.checked = [];
+    saveData();
+  }
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, ch => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[ch]);
+}
+
+function render() {
+  const list = $("task-list");
+  const checked = new Set(data.checked);
+  const total = data.items.length;
+  const done = data.items.filter(item => checked.has(item.id)).length;
+  const minutes = data.items.reduce((sum,item) => {
+    return sum + (Number(item.minutes) || 0);
+  },0);
+  const percent = total ? Math.round(done / total * 100) : 0;
+
+  $("done-count").textContent = done;
+  $("total-count").textContent = total;
+  $("total-minutes").textContent = minutes;
+  $("percent").textContent = percent;
+  $("progress-number").textContent = percent + "%";
+  $("progress-fill").style.width = percent + "%";
+  $("menu-date").textContent = new Date().toLocaleDateString("ja-JP", {
+    year:"numeric", month:"long", day:"numeric"
+  });
+
+  if (total === 0) {
+    list.innerHTML = `
+      <div class="empty">
+        <h3>練習メニューがまだないよ</h3>
+        <p>編集ページから自分の練習メニューを追加してね。</p>
+        <a class="btn primary" href="edit-practice.html">メニューを作る</a>
+      </div>
+    `;
+  } else {
+    list.innerHTML = data.items.map((item,index) => {
+      const isDone = checked.has(item.id);
+      return `
+        <label class="task ${isDone ? "done" : ""}">
+          <input type="checkbox" data-check-id="${escapeHTML(item.id)}"
+            ${isDone ? "checked" : ""} aria-label="${escapeHTML(item.title)}を完了">
+          <div class="task-content">
+            <div class="task-title">${escapeHTML(item.title)}</div>
+            <p class="task-desc">${escapeHTML(item.description || "")}</p>
+          </div>
+          <span class="task-time">${Number(item.minutes)||0}分</span>
+        </label>
+      `;
+    }).join("");
+  }
+
+  if (total > 0 && done === total) {
+    $("progress-message").textContent = "すべて完了！今日もよく頑張ったね！ 🎉";
+  } else if (done > 0) {
+    $("progress-message").textContent = "いい調子！そのまま続けよう。";
+  } else {
+    $("progress-message").textContent = "まずは最初の練習から始めよう！";
+  }
+
+  $("finish-button").disabled = total === 0 || done !== total;
+}
+
+function showToast(message) {
+  const toast = $("toast");
+  toast.textContent = message;
+  toast.style.display = "block";
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(() => {
+    toast.style.display = "none";
+  },2500);
+}
+
+$("task-list").addEventListener("change", event => {
+  const checkbox = event.target.closest("[data-check-id]");
+  if (!checkbox) return;
+
+  const id = checkbox.dataset.checkId;
+  const item = data.items.find(entry => entry.id === id);
+  const checked = new Set(data.checked);
+
+  if (checkbox.checked) {
+    checked.add(id);
+    if (item) showToast("「" + item.title + "」完了！ 🎸");
+  } else {
+    checked.delete(id);
+  }
+
+  data.checked = [...checked];
+  data.checkDate = todayKey();
+  saveData();
+  render();
+});
+
+$("finish-button").addEventListener("click",() => {
+  const done = data.items.filter(item => data.checked.includes(item.id)).length;
+  if (data.items.length === 0 || done !== data.items.length) {
+    showToast("すべての項目にチェックを入れてね！");
+    return;
+  }
+
+  showToast("今日の練習、全部完了！お疲れさま！ 🎉");
+});
+
+$("reset-button").addEventListener("click",() => {
+  if (!confirm("今日のチェックをすべて外しますか？")) return;
+  data.checked = [];
+  data.checkDate = todayKey();
+  saveData();
+  render();
+  showToast("チェックをリセットしたよ");
+});
+
+resetForNewDay();
+render();
+</script>
+</body>
+</html>
