@@ -1073,18 +1073,29 @@ function renderStats() {
 }
 
 function renderStrings() {
-  const s=strings[selected];
-  $("target-title").textContent=s.n+"弦 "+s.name;
-  $("target-hz").textContent=s.hz.toFixed(1)+" Hz を目指そう";
+  const s = strings[selected];
 
-  $("string-buttons").innerHTML=strings.map((x,i)=>`
-    <button class="string-btn ${i===selected?"active":""}" data-string="${i}">
+  // HTMLに要素がある場合だけ更新する
+  const targetTitle = $("target-title");
+  if (targetTitle) {
+    targetTitle.textContent = s.n + "弦 " + s.name;
+  }
+
+  const targetHz = $("target-hz");
+  if (targetHz) {
+    targetHz.textContent = s.hz.toFixed(1) + " Hz を目指そう";
+  }
+
+  const stringButtons = $("string-buttons");
+  if (!stringButtons) return;
+
+  stringButtons.innerHTML = strings.map((x, i) => `
+    <button class="string-btn ${i === selected ? "active" : ""}" data-string="${i}">
       <strong>${x.n}弦</strong>
       <span>${x.name}</span>
     </button>
   `).join("");
 }
-
 
 document.addEventListener("click",e=>{
   const button=e.target.closest("[data-string]");
