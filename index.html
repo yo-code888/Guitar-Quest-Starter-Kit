@@ -876,19 +876,55 @@ document.querySelectorAll("[data-practice-mode]").forEach(button=>{
   });
 });
 
-// コードの切り替え
-$("chord-options").addEventListener("click",event=>{
-  const button=event.target.closest("[data-chord]");
-  if(!button || !chordData[button.dataset.chord]) return;
-  currentChord=button.dataset.chord;
 
+ // コードの切り替え
+$("chord-options").addEventListener("click", event => {
+  const button = event.target.closest("[data-chord]");
+  if (!button || !chordData[button.dataset.chord]) return;
 
-$("chord-next").addEventListener("click",()=>{
-  const chords=Object.keys(chordData);
-  const index=chords.indexOf(currentChord);
-  currentChord=chords[(index+1)%chords.length];
+  currentChord = button.dataset.chord;
   renderChordDiagram();
 });
+
+// 次のコードへ
+$("chord-next").addEventListener("click", () => {
+  const chords = Object.keys(chordData);
+  const index = chords.indexOf(currentChord);
+  currentChord = chords[(index + 1) % chords.length];
+  renderChordDiagram();
+});
+
+// 単音の弦の切り替え
+$("single-string").addEventListener("change", event => {
+  singleString = Number(event.target.value);
+  renderFretboard();
+});
+
+// ギター図の位置を押したとき
+$("fretboard").addEventListener("click", event => {
+  const point = event.target.closest("[data-board-string]");
+  if (!point) return;
+
+  singleString = Number(point.dataset.boardString);
+  singleFret = Number(point.dataset.boardFret);
+  renderFretboard();
+});
+
+// チューナーへ移動
+$("single-tuner").addEventListener("click", () => {
+  if (singleFret !== 0) {
+    alert("現在のチューナーは開放弦の音程チェックに対応しているよ。開放弦を練習するときに使ってね。");
+  }
+
+  selected = [6, 5, 4, 3, 2, 1].indexOf(singleString);
+  save();
+  renderStrings();
+  showPage("tuner");
+});
+
+// 初期表示
+renderChordDiagram();
+renderFretboard();
 
 // 単音の弦の切り替え
 $("single-string").addEventListener("change",event=>{
@@ -949,7 +985,6 @@ const lessons = [
   }
 ];
 
-const $ = id => document.getElementById(id);
 const defaultState = {xp:0,cleared:[],lessons:[],selected:0};
 
 let state;
@@ -1039,6 +1074,7 @@ function renderStats() {
 
 function renderStrings() {
   const s=strings[selected];
+  const $ = id => document.getElementById(id);
   $("target-title").textContent=s.n+"弦 "+s.name;
   $("target-hz").textContent=s.hz.toFixed(1)+" Hz を目指そう";
 
