@@ -881,8 +881,7 @@ $("chord-options").addEventListener("click",event=>{
   const button=event.target.closest("[data-chord]");
   if(!button || !chordData[button.dataset.chord]) return;
   currentChord=button.dataset.chord;
-  renderChordDiagram();
-});
+
 
 $("chord-next").addEventListener("click",()=>{
   const chords=Object.keys(chordData);
