@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -55,8 +56,14 @@ nav button.active { background:#22222f; color:white; border-color:var(--line); }
   border:1px solid var(--line); border-radius:22px;
   background:linear-gradient(125deg,#202032,#151b21);
 }
-.eyebrow { color:var(--green); font-size:11px; letter-spacing:1.5px; font-weight:bold; }
-.hero h2 { font-size:clamp(30px,5vw,43px); line-height:1.2; margin:10px 0; }
+.eyebrow {
+  color:var(--green); font-size:11px;
+  letter-spacing:1.5px; font-weight:bold;
+}
+.hero h2 {
+  font-size:clamp(30px,5vw,43px);
+  line-height:1.2; margin:10px 0;
+}
 p { color:var(--muted); }
 .hero-art {
   background:radial-gradient(circle,#443b68,#20202c);
@@ -68,7 +75,10 @@ p { color:var(--muted); }
 }
 .primary { background:var(--green); color:#101016; border:0; }
 .secondary { background:#252532; color:var(--text); border:1px solid var(--line); }
-.grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:16px; }
+.grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:12px; margin-top:16px;
+}
 .card,.panel {
   background:var(--panel); border:1px solid var(--line);
   border-radius:17px; padding:18px; min-width:0;
@@ -103,11 +113,17 @@ p { color:var(--muted); }
   position:absolute; top:0; left:50%; transform:translateX(-50%);
   height:8px; width:8px; border-radius:50%; background:var(--green);
 }
-.meter-labels { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); }
+.meter-labels {
+  display:flex; justify-content:space-between;
+  font-size:11px; color:var(--muted);
+}
 .status { text-align:center; font-weight:bold; margin:14px 0; }
 .good { color:var(--green); }
 .bad { color:#ffe09a; }
-.strings { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:15px 0; }
+.strings {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:8px; margin:15px 0;
+}
 .string-btn {
   background:#232330; color:white; border:1px solid var(--line);
   border-radius:10px; padding:11px 5px;
@@ -115,7 +131,10 @@ p { color:var(--muted); }
 .string-btn strong { display:block; font-size:18px; }
 .string-btn span { font-size:11px; color:var(--muted); }
 .string-btn.active { border-color:var(--green); color:var(--green); }
-.progress { background:#30303e; height:8px; border-radius:10px; overflow:hidden; }
+.progress {
+  background:#30303e; height:8px;
+  border-radius:10px; overflow:hidden;
+}
 .progress div { background:var(--green); height:100%; width:0; }
 .lesson {
   display:flex; align-items:center; gap:12px; padding:13px;
@@ -136,6 +155,7 @@ p { color:var(--muted); }
   font-weight:bold; z-index:10; max-width:90%;
 }
 footer { color:#77778a; text-align:center; font-size:11px; margin-top:30px; }
+
 @media(max-width:700px) {
   .app { padding:15px 12px 35px; }
   .hero { grid-template-columns:1fr; padding:20px; }
@@ -159,7 +179,8 @@ footer { color:#77778a; text-align:center; font-size:11px; margin-top:30px; }
       <div class="subtitle">ギター練習ラボ · FIRST STEPS</div>
     </div>
   </div>
-  <div class="xp">LEVEL <strong id="level">1</strong><br>
+  <div class="xp">
+    LEVEL <strong id="level">1</strong><br>
     <strong id="xp">0</strong> XP
   </div>
 </header>
@@ -170,6 +191,8 @@ footer { color:#77778a; text-align:center; font-size:11px; margin-top:30px; }
   <button data-page="challenge">◎ 音程練習</button>
   <button data-page="lessons">▤ レッスン</button>
   <button data-page="progress">✦ 成長記録</button>
+  <button type="button" onclick="location.href='practice.html'">✓ 今日の練習</button>
+  <button type="button" onclick="location.href='edit-practice.html'">⚙ 練習を編集</button>
 </nav>
 
 <!-- ホーム -->
@@ -186,19 +209,57 @@ footer { color:#77778a; text-align:center; font-size:11px; margin-top:30px; }
 
   <div class="grid">
     <div class="card">
-      <div class="emoji">🎯</div><h3>今日のミッション</h3>
+      <div class="emoji">🎯</div>
+      <h3>今日のミッション</h3>
       <p>弦を1本ずつ鳴らして音程をチェック。</p>
       <button class="secondary" data-go="tuner">チューナーを開く</button>
     </div>
+
     <div class="card">
-      <div class="emoji">📚</div><h3>初心者レッスン</h3>
+      <div class="emoji">📚</div>
+      <h3>初心者レッスン</h3>
       <p>ギターの基本や弦の名前を学ぼう。</p>
       <button class="secondary" data-go="lessons">学習を始める</button>
     </div>
+
     <div class="card">
-      <div class="emoji">⚡</div><h3>成長記録</h3>
+      <div class="emoji">⚡</div>
+      <h3>成長記録</h3>
       <p>経験値やクリアした弦を確認しよう。</p>
       <button class="secondary" data-go="progress">記録を見る</button>
+    </div>
+  </div>
+
+  <!-- 新しい練習ページへのリンク -->
+  <div class="section-head">
+    <h2>毎日の練習</h2>
+    <span class="small muted">YOUR PRACTICE PLAN</span>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="emoji">🗓️</div>
+      <h3>今日の練習</h3>
+      <p>設定した練習メニューを順番に進めよう。</p>
+      <button class="secondary" onclick="location.href='practice.html'">
+        練習ページを開く
+      </button>
+    </div>
+
+    <div class="card">
+      <div class="emoji">⚙️</div>
+      <h3>練習メニュー編集</h3>
+      <p>練習内容・時間・順番をあとから変更できるよ。</p>
+      <button class="secondary" onclick="location.href='edit-practice.html'">
+        メニューを編集
+      </button>
+    </div>
+
+    <div class="card">
+      <div class="emoji">💾</div>
+      <h3>自動保存</h3>
+      <p>編集したメニューは同じブラウザに保存されるよ。</p>
+      <span class="small muted">端末間の同期には未対応</span>
     </div>
   </div>
 
@@ -206,26 +267,43 @@ footer { color:#77778a; text-align:center; font-size:11px; margin-top:30px; }
     <h2>開放弦チャレンジ</h2>
     <span class="small muted" id="home-count">0 / 6 弦</span>
   </div>
+
   <div class="card">
-    <div class="row between"><strong>今日の進捗</strong><span id="percent">0%</span></div>
-    <div class="progress" style="margin-top:12px"><div id="home-bar"></div></div>
+    <div class="row between">
+      <strong>達成状況</strong>
+      <span id="percent">0%</span>
+    </div>
+    <div class="progress" style="margin-top:12px">
+      <div id="home-bar"></div>
+    </div>
   </div>
 </section>
 
 <!-- チューナー -->
 <section class="view" id="tuner">
-  <div class="section-head"><h2>クロマチック・チューナー</h2><span class="small">LIVE AUDIO</span></div>
+  <div class="section-head">
+    <h2>クロマチック・チューナー</h2>
+    <span class="small">LIVE AUDIO</span>
+  </div>
+
   <div class="tuner-grid">
     <div class="panel">
       <div class="row between">
-        <strong>マイク入力</strong><span id="mic-state" class="small muted">未接続</span>
+        <strong>マイク入力</strong>
+        <span id="mic-state" class="small muted">未接続</span>
       </div>
+
       <p class="small">静かな場所で弦を1本だけ弾いてね。マイクの使用許可が必要だよ。</p>
+
       <div class="row">
         <button class="primary" id="start-mic">マイクを開始</button>
         <button class="secondary" id="stop-mic" disabled>停止</button>
       </div>
-      <div class="section-head"><h2 style="font-size:15px">練習する弦</h2></div>
+
+      <div class="section-head">
+        <h2 style="font-size:15px">練習する弦</h2>
+      </div>
+
       <div class="strings" id="string-buttons"></div>
       <p class="small muted">標準チューニング：6弦 E2 / 5弦 A2 / 4弦 D3 / 3弦 G3 / 2弦 B3 / 1弦 E4</p>
     </div>
@@ -235,7 +313,11 @@ footer { color:#77778a; text-align:center; font-size:11px; margin-top:30px; }
       <div class="note" id="note">—</div>
       <div class="freq" id="frequency">音を待っています</div>
       <div class="meter"><div class="needle" id="needle"></div></div>
-      <div class="meter-labels"><span>低い ♭</span><span>ぴったり</span><span>高い ♯</span></div>
+      <div class="meter-labels">
+        <span>低い ♭</span>
+        <span>ぴったり</span>
+        <span>高い ♯</span>
+      </div>
       <div class="status" id="status">マイクを開始してください</div>
       <p class="small muted">音程は目安です。周囲の音やマイクの性能で判定が変わることがあります。</p>
     </div>
@@ -244,14 +326,24 @@ footer { color:#77778a; text-align:center; font-size:11px; margin-top:30px; }
 
 <!-- 音程チャレンジ -->
 <section class="view" id="challenge">
-  <div class="section-head"><h2>単音チャレンジ</h2><span class="small">MISSION 01</span></div>
+  <div class="section-head">
+    <h2>単音チャレンジ</h2>
+    <span class="small">MISSION 01</span>
+  </div>
+
   <div class="panel">
     <div class="eyebrow">TARGET STRING</div>
     <h2 id="target-title">6弦 E2</h2>
     <p id="target-hz">82.4 Hz を目指そう</p>
     <p>目標の弦を選び、マイクで音を確認しよう。正しい音程が安定して検出されるとクリアになるよ。</p>
+
     <button class="primary" data-go="tuner">チューナーを開く</button>
-    <div class="section-head"><h2 style="font-size:16px">クリア状況</h2><span id="challenge-count" class="small">0 / 6</span></div>
+
+    <div class="section-head">
+      <h2 style="font-size:16px">クリア状況</h2>
+      <span id="challenge-count" class="small">0 / 6</span>
+    </div>
+
     <div class="progress"><div id="challenge-bar"></div></div>
     <div class="strings" id="challenge-strings"></div>
     <p class="small muted">この試作版は単音判定のみ。コード全体やリズムの正確さはまだ判定しません。</p>
@@ -260,8 +352,13 @@ footer { color:#77778a; text-align:center; font-size:11px; margin-top:30px; }
 
 <!-- レッスン -->
 <section class="view" id="lessons">
-  <div class="section-head"><h2>初心者レッスン</h2><span class="small">START FROM ZERO</span></div>
+  <div class="section-head">
+    <h2>初心者レッスン</h2>
+    <span class="small">START FROM ZERO</span>
+  </div>
+
   <div id="lesson-list"></div>
+
   <div class="panel" style="margin-top:15px">
     <div class="eyebrow">LESSON GUIDE</div>
     <h2 id="lesson-title">ギターを知ろう</h2>
@@ -272,19 +369,33 @@ footer { color:#77778a; text-align:center; font-size:11px; margin-top:30px; }
 
 <!-- 成長記録 -->
 <section class="view" id="progress">
-  <div class="section-head"><h2>成長記録</h2><span class="small">YOUR PROGRESS</span></div>
-  <div class="grid">
-    <div class="card"><div class="small muted">EXPERIENCE</div><h2><span id="total-xp">0</span> XP</h2></div>
-    <div class="card"><div class="small muted">LEVEL</div><h2 id="total-level">1</h2></div>
-    <div class="card"><div class="small muted">CLEARED STRINGS</div><h2><span id="cleared-count">0</span> / 6</h2></div>
+  <div class="section-head">
+    <h2>成長記録</h2>
+    <span class="small">YOUR PROGRESS</span>
   </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="small muted">EXPERIENCE</div>
+      <h2><span id="total-xp">0</span> XP</h2>
+    </div>
+    <div class="card">
+      <div class="small muted">LEVEL</div>
+      <h2 id="total-level">1</h2>
+    </div>
+    <div class="card">
+      <div class="small muted">CLEARED STRINGS</div>
+      <h2><span id="cleared-count">0</span> / 6</h2>
+    </div>
+  </div>
+
   <div class="section-head"><h2>弦ごとの達成状況</h2></div>
   <div class="panel" id="progress-list"></div>
   <p class="small muted">記録はこのブラウザ内に保存されます。ブラウザのデータを消すと消える場合があります。</p>
   <button class="secondary" id="reset">記録をリセット</button>
 </section>
 
-<footer>GUITAR QUEST · PROTOTYPE 0.1 · 音声は端末内で処理</footer>
+<footer>GUITAR QUEST · PROTOTYPE 0.2 · 音声は端末内で処理</footer>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -334,10 +445,14 @@ const defaultState = {xp:0,cleared:[],lessons:[],selected:0};
 
 let state;
 try {
-  state = {...defaultState,...JSON.parse(localStorage.getItem("guitarQuestState") || "{}")};
+  state = {
+    ...defaultState,
+    ...JSON.parse(localStorage.getItem("guitarQuestState") || "{}")
+  };
 } catch {
   state = {...defaultState};
 }
+
 if (!Array.isArray(state.cleared)) state.cleared=[];
 if (!Array.isArray(state.lessons)) state.lessons=[];
 
@@ -349,7 +464,9 @@ let stableHits=0,lastNote="",lastSuccessAt=0;
 
 function save() {
   state.selected=selected;
-  try { localStorage.setItem("guitarQuestState",JSON.stringify(state)); } catch {}
+  try {
+    localStorage.setItem("guitarQuestState",JSON.stringify(state));
+  } catch {}
   renderStats();
 }
 
@@ -360,18 +477,25 @@ function notify(message) {
   notify.timer=setTimeout(()=>$("toast").style.display="none",2300);
 }
 
-function level() { return Math.floor(state.xp/100)+1; }
+function level() {
+  return Math.floor(state.xp/100)+1;
+}
 
 function showPage(id) {
-  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===id));
-  document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+  document.querySelectorAll(".view").forEach(v => {
+    v.classList.toggle("active",v.id===id);
+  });
+  document.querySelectorAll("[data-page]").forEach(b => {
+    b.classList.toggle("active",b.dataset.page===id);
+  });
   if(id==="tuner") renderStrings();
 }
 
-document.querySelectorAll("[data-page]").forEach(b=>{
+document.querySelectorAll("[data-page]").forEach(b => {
   b.addEventListener("click",()=>showPage(b.dataset.page));
 });
-document.querySelectorAll("[data-go]").forEach(b=>{
+
+document.querySelectorAll("[data-go]").forEach(b => {
   b.addEventListener("click",()=>showPage(b.dataset.go));
 });
 
@@ -391,7 +515,8 @@ function renderStats() {
     <button class="string-btn ${state.cleared.includes(s.n)?"active":""}" data-string="${i}">
       <strong>${s.n}弦</strong>
       <span>${s.name} ${state.cleared.includes(s.n)?"✓":"未達成"}</span>
-    </button>`).join("");
+    </button>
+  `).join("");
 
   $("progress-list").innerHTML=strings.map(s=>`
     <div class="row between" style="padding:10px 0;border-bottom:1px solid var(--line)">
@@ -399,23 +524,30 @@ function renderStats() {
       <span class="${state.cleared.includes(s.n)?"good":"muted"}">
         ${state.cleared.includes(s.n)?"✓ クリア":"未達成"}
       </span>
-    </div>`).join("");
+    </div>
+  `).join("");
 }
 
 function renderStrings() {
   const s=strings[selected];
   $("target-title").textContent=s.n+"弦 "+s.name;
   $("target-hz").textContent=s.hz.toFixed(1)+" Hz を目指そう";
+
   $("string-buttons").innerHTML=strings.map((x,i)=>`
     <button class="string-btn ${i===selected?"active":""}" data-string="${i}">
-      <strong>${x.n}弦</strong><span>${x.name}</span>
-    </button>`).join("");
+      <strong>${x.n}弦</strong>
+      <span>${x.name}</span>
+    </button>
+  `).join("");
 }
 
 document.addEventListener("click",e=>{
   const button=e.target.closest("[data-string]");
-  if(!button)return;
+  if(!button) return;
+
   selected=Number(button.dataset.string);
+  stableHits=0;
+  lastNote="";
   save();
   renderStrings();
 });
@@ -423,11 +555,15 @@ document.addEventListener("click",e=>{
 $("lesson-list").innerHTML=lessons.map((l,i)=>`
   <div class="lesson">
     <div class="number">${String(i+1).padStart(2,"0")}</div>
-    <div class="info"><h3>${l.title}</h3><p>${l.sub}</p></div>
+    <div class="info">
+      <h3>${l.title}</h3>
+      <p>${l.sub}</p>
+    </div>
     <button class="secondary" data-lesson="${i}">
       ${state.lessons.includes(i)?"復習":"学ぶ"}
     </button>
-  </div>`).join("");
+  </div>
+`).join("");
 
 function openLesson(i) {
   currentLesson=i;
@@ -439,7 +575,8 @@ function openLesson(i) {
 
 $("lesson-list").addEventListener("click",e=>{
   const button=e.target.closest("[data-lesson]");
-  if(!button)return;
+  if(!button) return;
+
   openLesson(Number(button.dataset.lesson));
   $("lesson-body").scrollIntoView({behavior:"smooth",block:"center"});
 });
@@ -450,9 +587,23 @@ $("complete-lesson").addEventListener("click",()=>{
     state.xp+=20;
     save();
     notify("レッスンクリア！ +20 XP");
+
+    $("lesson-list").innerHTML=lessons.map((l,i)=>`
+      <div class="lesson">
+        <div class="number">${String(i+1).padStart(2,"0")}</div>
+        <div class="info">
+          <h3>${l.title}</h3>
+          <p>${l.sub}</p>
+        </div>
+        <button class="secondary" data-lesson="${i}">
+          ${state.lessons.includes(i)?"復習":"学ぶ"}
+        </button>
+      </div>
+    `).join("");
   } else {
     notify("復習できたね！");
   }
+
   $("complete-lesson").textContent="復習完了";
 });
 
@@ -461,7 +612,12 @@ function noteFromFrequency(freq) {
   const names=["C","C♯","D","D♯","E","F","F♯","G","G♯","A","A♯","B"];
   const name=names[(midi%12+12)%12]+(Math.floor(midi/12)-1);
   const exact=440*Math.pow(2,(midi-69)/12);
-  return {midi,name,cents:1200*Math.log2(freq/exact)};
+
+  return {
+    midi,
+    name,
+    cents:1200*Math.log2(freq/exact)
+  };
 }
 
 function updatePitch(freq,clarity) {
@@ -471,6 +627,7 @@ function updatePitch(freq,clarity) {
     $("status").textContent="弦を1本だけ、もう一度弾いてみて";
     $("status").className="status bad";
     stableHits=0;
+    lastNote="";
     return;
   }
 
@@ -489,9 +646,11 @@ function updatePitch(freq,clarity) {
 
     if(lastNote===note.name) stableHits++;
     else stableHits=0;
+
     lastNote=note.name;
 
-    if(stableHits>=5 && Date.now()-lastSuccessAt>3500 &&
+    if(stableHits>=5 &&
+       Date.now()-lastSuccessAt>3500 &&
        !state.cleared.includes(target.n)) {
       state.cleared.push(target.n);
       state.xp+=10;
@@ -503,13 +662,16 @@ function updatePitch(freq,clarity) {
   } else {
     stableHits=0;
     lastNote="";
+
     if(note.midi===targetMidi) {
-      $("status").textContent=note.cents<0?"少し高くしてみよう":"少し低くしてみよう";
+      $("status").textContent=
+        note.cents<0?"少し高くしてみよう":"少し低くしてみよう";
     } else if(note.midi<targetMidi) {
       $("status").textContent="目標より低い音です";
     } else {
       $("status").textContent="目標より高い音です";
     }
+
     $("status").className="status bad";
   }
 }
@@ -517,7 +679,7 @@ function updatePitch(freq,clarity) {
 async function startMic() {
   try {
     if(!navigator.mediaDevices?.getUserMedia) {
-      throw new Error("マイクが使えません。GitHub PagesのHTTPSページを開いてください。");
+      throw new Error("マイクが使えません。HTTPSのページで開いてください。");
     }
 
     stream=await navigator.mediaDevices.getUserMedia({
@@ -548,40 +710,54 @@ async function startMic() {
     $("status").textContent="弦を1本だけ弾いてください";
 
     function tick() {
-      if(!analyser||!detector||!audioContext)return;
+      if(!analyser||!detector||!audioContext) return;
 
       analyser.getFloatTimeDomainData(buffer);
+
       let sum=0;
-      for(let i=0;i<buffer.length;i++)sum+=buffer[i]*buffer[i];
+      for(let i=0;i<buffer.length;i++) {
+        sum+=buffer[i]*buffer[i];
+      }
+
       const rms=Math.sqrt(sum/buffer.length);
 
       if(rms>0.008) {
-        const [freq,clarity]=detector.findPitch(buffer,audioContext.sampleRate);
+        const [freq,clarity]=detector.findPitch(
+          buffer,
+          audioContext.sampleRate
+        );
         updatePitch(freq,clarity);
       } else {
         $("note").textContent="—";
         $("frequency").textContent="音を待っています";
         $("status").textContent="弦を1本だけ弾いてください";
         $("status").className="status";
+        stableHits=0;
+        lastNote="";
       }
+
       raf=requestAnimationFrame(tick);
     }
+
     tick();
   } catch(err) {
-    notify(err.message||"マイクを開始できませんでした");
-    $("mic-state").textContent="未接続";
-    $("status").textContent="マイクの許可とブラウザ設定を確認してください";
-    $("status").className="status bad";
+    const message=err.message||"マイクを開始できませんでした";
     stopMic();
+    $("mic-state").textContent="未接続";
+    $("status").textContent=message;
+    $("status").className="status bad";
+    notify(message);
   }
 }
 
 function stopMic() {
-  if(raf)cancelAnimationFrame(raf);
+  if(raf) cancelAnimationFrame(raf);
   raf=null;
-  if(stream)stream.getTracks().forEach(t=>t.stop());
+
+  if(stream) stream.getTracks().forEach(t=>t.stop());
   stream=null;
-  if(audioContext)audioContext.close().catch(()=>{});
+
+  if(audioContext) audioContext.close().catch(()=>{});
   audioContext=null;
   source=null;
   analyser=null;
@@ -597,6 +773,7 @@ function stopMic() {
   $("status").textContent="マイクを開始してください";
   $("status").className="status";
   $("needle").style.left="50%";
+
   stableHits=0;
   lastNote="";
 }
@@ -605,12 +782,14 @@ $("start-mic").addEventListener("click",startMic);
 $("stop-mic").addEventListener("click",stopMic);
 
 $("reset").addEventListener("click",()=>{
-  if(!confirm("経験値と練習記録をすべてリセットしますか？"))return;
+  if(!confirm("経験値と練習記録をすべてリセットしますか？")) return;
+
   stopMic();
   state={...defaultState,cleared:[],lessons:[]};
   selected=0;
   save();
   renderStrings();
+  openLesson(0);
   notify("記録をリセットしました");
 });
 
