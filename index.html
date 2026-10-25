@@ -645,7 +645,7 @@ const strings = [
   {n:2,name:"B3",hz:246.94},
   {n:1,name:"E4",hz:329.63}
 ];
-
+const $ = id => document.getElementById(id);
   
 /* ===== 初心者向けコード・単音ガイド ===== */
 
@@ -925,7 +925,7 @@ $("single-tuner").addEventListener("click", () => {
 // 初期表示
 renderChordDiagram();
 renderFretboard();
-
+  
 // 単音の弦の切り替え
 $("single-string").addEventListener("change",event=>{
   singleString=Number(event.target.value);
@@ -1074,7 +1074,6 @@ function renderStats() {
 
 function renderStrings() {
   const s=strings[selected];
-  const $ = id => document.getElementById(id);
   $("target-title").textContent=s.n+"弦 "+s.name;
   $("target-hz").textContent=s.hz.toFixed(1)+" Hz を目指そう";
 
