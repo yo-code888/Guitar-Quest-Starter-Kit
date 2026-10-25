@@ -165,6 +165,144 @@ footer { color:#77778a; text-align:center; font-size:11px; margin-top:30px; }
   h1 { font-size:17px; }
   .xp { font-size:12px; }
 }
+  
+/* ===== Beginner Guitar Lab ===== */
+.practice-tabs {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:15px 0;
+}
+.practice-tabs button {
+  flex:1;
+  min-width:110px;
+  background:#252532;
+  color:var(--text);
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:12px 10px;
+  font-weight:bold;
+}
+.practice-tabs button.active {
+  background:var(--green);
+  color:#101016;
+  border-color:var(--green);
+}
+.practice-panel { display:none; }
+.practice-panel.active { display:block; }
+.chord-options {
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:7px;
+  margin:14px 0;
+}
+.chord-option {
+  background:#222230;
+  color:var(--text);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:10px 4px;
+  font-weight:bold;
+}
+.chord-option.active {
+  background:#302b46;
+  color:var(--purple);
+  border-color:var(--purple);
+}
+.guitar-diagram {
+  background:#101018;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px;
+  margin:12px 0;
+  overflow:hidden;
+}
+.guitar-diagram svg {
+  width:100%;
+  max-width:440px;
+  display:block;
+  margin:auto;
+  height:auto;
+}
+.diagram-legend {
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:12px;
+  font-size:12px;
+  color:var(--muted);
+  margin-top:8px;
+}
+.legend-dot {
+  display:inline-block;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:var(--green);
+  vertical-align:-2px;
+  margin-right:4px;
+}
+.step-list {
+  display:grid;
+  gap:8px;
+  margin:12px 0;
+}
+.step-item {
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  padding:10px;
+  background:#20202c;
+  border-radius:10px;
+}
+.step-number {
+  display:grid;
+  place-items:center;
+  min-width:27px;
+  height:27px;
+  border-radius:9px;
+  background:#302b46;
+  color:var(--purple);
+  font-weight:bold;
+}
+.note-result {
+  text-align:center;
+  padding:16px;
+  background:#20202c;
+  border-radius:13px;
+  margin:12px 0;
+}
+.note-result strong {
+  display:block;
+  font-size:32px;
+  color:var(--green);
+}
+.fretboard-wrap {
+  overflow-x:auto;
+  background:#101018;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:8px;
+}
+.fretboard-wrap svg {
+  display:block;
+  width:100%;
+  min-width:310px;
+  height:auto;
+}
+.practice-hint {
+  padding:12px;
+  background:#1b2923;
+  border:1px solid #355846;
+  border-radius:11px;
+  color:#d6f9e5;
+  font-size:13px;
+  margin-top:12px;
+}
+@media(max-width:500px) {
+  .chord-options { grid-template-columns:repeat(3,minmax(0,1fr)); }
+}
+
 </style>
 </head>
 
@@ -324,29 +462,125 @@ footer { color:#77778a; text-align:center; font-size:11px; margin-top:30px; }
   </div>
 </section>
 
-<!-- 音程チャレンジ -->
+
+<!-- 音程・コード・単音練習 -->
 <section class="view" id="challenge">
   <div class="section-head">
-    <h2>単音チャレンジ</h2>
-    <span class="small">MISSION 01</span>
+    <h2>ギター練習ラボ</h2>
+    <span class="small">BEGINNER MODE</span>
   </div>
 
   <div class="panel">
-    <div class="eyebrow">TARGET STRING</div>
-    <h2 id="target-title">6弦 E2</h2>
-    <p id="target-hz">82.4 Hz を目指そう</p>
-    <p>目標の弦を選び、マイクで音を確認しよう。正しい音程が安定して検出されるとクリアになるよ。</p>
+    <p>練習したい内容を選ぼう。図の丸印が、指を置く場所の目印だよ。</p>
 
-    <button class="primary" data-go="tuner">チューナーを開く</button>
-
-    <div class="section-head">
-      <h2 style="font-size:16px">クリア状況</h2>
-      <span id="challenge-count" class="small">0 / 6</span>
+    <div class="practice-tabs">
+      <button class="active" data-practice-mode="chord">🎸 コード練習</button>
+      <button data-practice-mode="single">🎯 単音練習</button>
+      <button data-practice-mode="tuning">🎵 音程チェック</button>
     </div>
 
-    <div class="progress"><div id="challenge-bar"></div></div>
-    <div class="strings" id="challenge-strings"></div>
-    <p class="small muted">この試作版は単音判定のみ。コード全体やリズムの正確さはまだ判定しません。</p>
+    <!-- コード練習 -->
+    <div class="practice-panel active" id="chord-practice">
+      <div class="eyebrow">CHORD TRAINING</div>
+      <h2>指の形を覚えよう</h2>
+      <p>コードを選ぶと、指を置く場所が図に表示されるよ。まずはEmから挑戦してみよう。</p>
+
+      <div class="chord-options" id="chord-options">
+        <button class="chord-option active" data-chord="Em">Em</button>
+        <button class="chord-option" data-chord="Am">Am</button>
+        <button class="chord-option" data-chord="C">C</button>
+        <button class="chord-option" data-chord="G">G</button>
+        <button class="chord-option" data-chord="D">D</button>
+      </div>
+
+      <div class="guitar-diagram">
+        <div class="row between">
+          <strong id="chord-title">Em（イーマイナー）</strong>
+          <span class="small muted">コード図</span>
+        </div>
+        <div id="chord-diagram"></div>
+        <div class="diagram-legend">
+          <span><span class="legend-dot"></span>指を置く場所</span>
+          <span>○ 開放弦</span>
+          <span>× 弾かない弦</span>
+        </div>
+      </div>
+
+      <div class="step-list" id="chord-steps"></div>
+
+      <div class="practice-hint" id="chord-tip">
+        最初は指を置いて、弦を1本ずつ鳴らしてみよう。
+      </div>
+
+      <div style="margin-top:15px">
+        <button class="primary" id="chord-next">次のコードへ →</button>
+      </div>
+    </div>
+
+    <!-- 単音練習 -->
+    <div class="practice-panel" id="single-practice">
+      <div class="eyebrow">SINGLE NOTE TRAINING</div>
+      <h2>押さえる場所を選ぼう</h2>
+      <p>下のギター図で弦とフレットの位置を押してね。最初は開放弦（0フレット）から始めよう。</p>
+
+      <div class="row" style="margin:12px 0">
+        <label for="single-string">弦を選ぶ</label>
+        <select id="single-string" class="secondary"
+          style="border-radius:10px;padding:9px;max-width:100%">
+          <option value="6">6弦（太い弦）</option>
+          <option value="5">5弦</option>
+          <option value="4">4弦</option>
+          <option value="3">3弦</option>
+          <option value="2">2弦</option>
+          <option value="1">1弦（細い弦）</option>
+        </select>
+      </div>
+
+      <div class="fretboard-wrap">
+        <div id="fretboard"></div>
+      </div>
+
+      <div class="note-result">
+        <div class="small muted">選択した音</div>
+        <strong id="single-note-name">E2</strong>
+        <span id="single-note-detail" class="small muted">6弦・開放弦</span>
+      </div>
+
+      <div class="step-list" id="single-steps"></div>
+
+      <div class="practice-hint">
+        ① 弦を選ぶ → ② フレットの位置を選ぶ → ③ ギターで同じ場所を押さえて弾く。<br>
+        ※ マイクによる音程判定は、現在は開放弦のチューニングに対応しているよ。
+      </div>
+
+      <button class="primary" id="single-tuner" style="margin-top:15px">
+        開放弦をチューナーで確認 →
+      </button>
+    </div>
+
+    <!-- 音程チェック -->
+    <div class="practice-panel" id="tuning-practice">
+      <div class="eyebrow">TUNING TRAINING</div>
+      <h2>実際の音を確かめよう</h2>
+      <p>ギターの弦を1本だけ弾いて、マイクで音を確認しよう。まずは開放弦の音程を合わせる練習だよ。</p>
+
+      <div class="strings" id="challenge-strings"></div>
+
+      <div class="practice-hint">
+        6弦から順に、E・A・D・G・B・E。<br>
+        目標の音に近づくと、チューナーの表示が真ん中に近づくよ。
+      </div>
+
+      <button class="primary" data-go="tuner" style="margin-top:15px">
+        チューナーを開く →
+      </button>
+
+      <div class="section-head">
+        <h2 style="font-size:16px">開放弦クリア状況</h2>
+        <span id="challenge-count" class="small">0 / 6</span>
+      </div>
+      <div class="progress"><div id="challenge-bar"></div></div>
+    </div>
   </div>
 </section>
 
@@ -411,6 +645,282 @@ const strings = [
   {n:2,name:"B3",hz:246.94},
   {n:1,name:"E4",hz:329.63}
 ];
+
+  
+/* ===== 初心者向けコード・単音ガイド ===== */
+
+const chordData = {
+  Em: {
+    title:"Em（イーマイナー）",
+    positions:[0,2,2,0,0,0],
+    fingers:[0,2,3,0,0,0],
+    steps:[
+      "6弦・5弦・4弦・3弦・2弦・1弦を使うよ。",
+      "5弦の2フレットに人差し指を置こう。",
+      "4弦の2フレットに中指を置こう。",
+      "6本の弦をゆっくり弾いて、音がきれいに出るか確認しよう。"
+    ],
+    tip:"Emは初心者におすすめのコード。指2本から始められるよ。"
+  },
+  Am: {
+    title:"Am（エーマイナー）",
+    positions:[-1,0,2,2,1,0],
+    fingers:[0,0,2,3,1,0],
+    steps:[
+      "6弦は弾かず、5弦から1弦までを弾こう。",
+      "4弦の2フレットに中指を置こう。",
+      "3弦の2フレットに薬指を置こう。",
+      "2弦の1フレットに人差し指を置こう。"
+    ],
+    tip:"指先を立てて、隣の弦に触れないようにすると音がきれいになるよ。"
+  },
+  C: {
+    title:"C（シーメジャー）",
+    positions:[-1,3,2,0,1,0],
+    fingers:[0,3,2,0,1,0],
+    steps:[
+      "6弦は弾かず、5弦から1弦までを弾こう。",
+      "5弦の3フレットに薬指を置こう。",
+      "4弦の2フレットに中指を置こう。",
+      "2弦の1フレットに人差し指を置こう。"
+    ],
+    tip:"指を一度に置くのが難しければ、1本ずつ形を作ってみよう。"
+  },
+  G: {
+    title:"G（ジーメジャー）",
+    positions:[3,2,0,0,0,3],
+    fingers:[2,1,0,0,0,3],
+    steps:[
+      "6本の弦を使うコードだよ。",
+      "6弦の3フレットに中指を置こう。",
+      "5弦の2フレットに人差し指を置こう。",
+      "1弦の3フレットに薬指を置こう。",
+      "6本の弦をゆっくり弾いてみよう。"
+    ],
+    tip:"手首に力を入れすぎないようにして、指先で押さえよう。"
+  },
+  D: {
+    title:"D（ディーメジャー）",
+    positions:[-1,-1,0,2,3,2],
+    fingers:[0,0,0,1,3,2],
+    steps:[
+      "6弦と5弦は弾かず、4弦から1弦を弾こう。",
+      "3弦の2フレットに人差し指を置こう。",
+      "2弦の3フレットに薬指を置こう。",
+      "1弦の2フレットに中指を置こう。"
+    ],
+    tip:"指を小さくまとめるイメージで。6弦・5弦を弾かないように気をつけよう。"
+  }
+};
+
+let currentChord = "Em";
+let singleString = 6;
+let singleFret = 0;
+
+const noteNames = ["C","C♯","D","D♯","E","F","F♯","G","G♯","A","A♯","B"];
+const openStringMidi = {6:40,5:45,4:50,3:55,2:59,1:64};
+const openStringName = {6:"E2",5:"A2",4:"D3",3:"G3",2:"B3",1:"E4"};
+
+function noteNameFor(stringNumber,fret) {
+  const midi = openStringMidi[stringNumber] + fret;
+  const name = noteNames[((midi % 12) + 12) % 12];
+  const octave = Math.floor(midi / 12) - 1;
+  return name + octave;
+}
+
+function renderChordDiagram() {
+  const chord = chordData[currentChord];
+  $("chord-title").textContent = chord.title;
+
+  document.querySelectorAll("[data-chord]").forEach(button => {
+    button.classList.toggle("active",button.dataset.chord===currentChord);
+  });
+
+  const xStart=40, xGap=48, yStart=43, yGap=31;
+  let svg = `<svg viewBox="0 0 340 190" role="img" aria-label="${chord.title}の指の位置">`;
+
+  // 弦の名前（6弦から1弦）
+  for(let i=0;i<6;i++) {
+    const x=xStart+i*xGap;
+    svg += `<text x="${x}" y="17" fill="#a4a4b5" font-size="10" text-anchor="middle">${6-i}</text>`;
+  }
+
+  // フレット線と弦
+  for(let fret=0;fret<=4;fret++) {
+    const y=yStart+fret*yGap;
+    svg += `<line x1="${xStart}" y1="${y}" x2="${xStart+5*xGap}" y2="${y}" stroke="${fret===0?"#f5f5fa":"#555568"}" stroke-width="${fret===0?4:1.5}"/>`;
+  }
+  for(let i=0;i<6;i++) {
+    const x=xStart+i*xGap;
+    svg += `<line x1="${x}" y1="${yStart}" x2="${x}" y2="${yStart+4*yGap}" stroke="#8d8d9d" stroke-width="1.5"/>`;
+  }
+
+  chord.positions.forEach((fret,i)=>{
+    const x=xStart+i*xGap;
+    if(fret===-1) {
+      svg += `<text x="${x}" y="34" fill="#ff9696" font-size="18" font-weight="bold" text-anchor="middle">×</text>`;
+    } else if(fret===0) {
+      svg += `<circle cx="${x}" cy="31" r="6" fill="none" stroke="#9af5c2" stroke-width="2"/>`;
+    } else {
+      const y=yStart+(fret-0.5)*yGap;
+      const finger=chord.fingers[i] || "";
+      svg += `<circle cx="${x}" cy="${y}" r="10" fill="#9af5c2"/>`;
+      svg += `<text x="${x}" y="${y+4}" fill="#101016" font-size="11" font-weight="bold" text-anchor="middle">${finger}</text>`;
+    }
+  });
+
+  svg += `<text x="40" y="184" fill="#a4a4b5" font-size="10">6弦</text>`;
+  svg += `<text x="280" y="184" fill="#a4a4b5" font-size="10">1弦</text>`;
+  svg += `</svg>`;
+
+  $("chord-diagram").innerHTML=svg;
+  $("chord-steps").innerHTML=chord.steps.map((step,i)=>`
+    <div class="step-item">
+      <span class="step-number">${i+1}</span>
+      <span>${step}</span>
+    </div>
+  `).join("");
+  $("chord-tip").textContent="💡 "+chord.tip;
+}
+
+function renderFretboard() {
+  const xStart=44, xGap=56, yTop=37, yGap=34;
+  let svg=`<svg viewBox="0 0 380 250" role="img" aria-label="弦とフレットを選ぶギター図">`;
+
+  // フレット番号
+  svg+=`<text x="13" y="17" fill="#a4a4b5" font-size="11">弦</text>`;
+  svg+=`<text x="365" y="17" fill="#a4a4b5" font-size="11" text-anchor="end">フレット</text>`;
+
+  for(let fret=0;fret<=5;fret++) {
+    const y=yTop+fret*yGap;
+    svg+=`<line x1="${xStart}" y1="${y}" x2="${xStart+5*xGap}" y2="${y}" stroke="${fret===0?"#f5f5fa":"#555568"}" stroke-width="${fret===0?4:1.5}"/>`;
+  }
+
+  for(let i=0;i<6;i++) {
+    const x=xStart+i*xGap;
+    const stringNo=6-i;
+    svg+=`<line x1="${x}" y1="${yTop}" x2="${x}" y2="${yTop+5*yGap}" stroke="#8d8d9d" stroke-width="${stringNo===6?3:1.5}"/>`;
+    svg+=`<text x="${x}" y="232" fill="${stringNo===singleString?"#9af5c2":"#a4a4b5"}" font-size="12" text-anchor="middle">${stringNo}弦</text>`;
+  }
+
+  // 開放弦の選択ポイント
+  for(let i=0;i<6;i++) {
+    const x=xStart+i*xGap;
+    const stringNo=6-i;
+    const selected=stringNo===singleString && singleFret===0;
+    svg+=`<circle cx="${x}" cy="25" r="${selected?9:6}" fill="${selected?"#9af5c2":"#252532"}" stroke="${selected?"#9af5c2":"#77778a"}" stroke-width="2" data-board-string="${stringNo}" data-board-fret="0" style="cursor:pointer"/>`;
+    svg+=`<text x="${x}" y="8" fill="#a4a4b5" font-size="9" text-anchor="middle">${openStringName[stringNo]}</text>`;
+  }
+
+  // 1〜5フレットの選択ポイント
+  for(let fret=1;fret<=5;fret++) {
+    for(let i=0;i<6;i++) {
+      const x=xStart+i*xGap;
+      const y=yTop+(fret-0.5)*yGap;
+      const stringNo=6-i;
+      const selected=stringNo===singleString && fret===singleFret;
+      svg+=`<circle cx="${x}" cy="${y}" r="${selected?10:7}" fill="${selected?"#9af5c2":"#302b46"}" stroke="${selected?"#9af5c2":"#77778a"}" stroke-width="1.5" data-board-string="${stringNo}" data-board-fret="${fret}" style="cursor:pointer"/>`;
+    }
+  }
+
+  // フレット番号
+  for(let fret=1;fret<=5;fret++) {
+    const y=yTop+(fret-0.5)*yGap+4;
+    svg+=`<text x="16" y="${y}" fill="#a4a4b5" font-size="11">${fret}</text>`;
+  }
+
+  svg+=`</svg>`;
+  $("fretboard").innerHTML=svg;
+
+  $("single-string").value=String(singleString);
+  $("single-note-name").textContent=noteNameFor(singleString,singleFret);
+  $("single-note-detail").textContent=
+    singleString+"弦・"+(singleFret===0?"開放弦":singleFret+"フレット");
+
+  const steps = singleFret===0
+    ? [
+        `${singleString}弦を選んだよ。`,
+        "左手でフレットを押さえずに、弦を1本だけ弾こう。",
+        "音がきれいに伸びるか聴いてみよう。",
+        "チューナーで音名が合っているか確かめよう。"
+      ]
+    : [
+        `${singleString}弦の${singleFret}フレットを選んだよ。`,
+        "左手の指先で、指定されたフレットのすぐ手前を押さえよう。",
+        "右手でその弦だけを弾いてみよう。",
+        "表示された音名と、実際に聞こえる音を確かめよう。"
+      ];
+
+  $("single-steps").innerHTML=steps.map((step,i)=>`
+    <div class="step-item">
+      <span class="step-number">${i+1}</span>
+      <span>${step}</span>
+    </div>
+  `).join("");
+}
+
+// 練習モード切り替え
+document.querySelectorAll("[data-practice-mode]").forEach(button=>{
+  button.addEventListener("click",()=>{
+    const mode=button.dataset.practiceMode;
+
+    document.querySelectorAll("[data-practice-mode]").forEach(b=>{
+      b.classList.toggle("active",b===button);
+    });
+
+    document.querySelectorAll(".practice-panel").forEach(panel=>{
+      panel.classList.toggle("active",panel.id===mode+"-practice");
+    });
+
+    if(mode==="tuning") renderStats();
+  });
+});
+
+// コードの切り替え
+$("chord-options").addEventListener("click",event=>{
+  const button=event.target.closest("[data-chord]");
+  if(!button || !chordData[button.dataset.chord]) return;
+  currentChord=button.dataset.chord;
+  renderChordDiagram();
+});
+
+$("chord-next").addEventListener("click",()=>{
+  const chords=Object.keys(chordData);
+  const index=chords.indexOf(currentChord);
+  currentChord=chords[(index+1)%chords.length];
+  renderChordDiagram();
+});
+
+// 単音の弦の切り替え
+$("single-string").addEventListener("change",event=>{
+  singleString=Number(event.target.value);
+  renderFretboard();
+});
+
+// ギター図の位置を押したとき
+$("fretboard").addEventListener("click",event=>{
+  const point=event.target.closest("[data-board-string]");
+  if(!point) return;
+
+  singleString=Number(point.dataset.boardString);
+  singleFret=Number(point.dataset.boardFret);
+  renderFretboard();
+});
+
+// チューナーへ移動
+$("single-tuner").addEventListener("click",()=>{
+  if(singleFret!==0) {
+    alert("現在のチューナーは開放弦の音程チェックに対応しているよ。開放弦を練習するときに使ってね。");
+  }
+  selected=[6,5,4,3,2,1].indexOf(singleString);
+  save();
+  renderStrings();
+  showPage("tuner");
+});
+
+// 初期表示
+renderChordDiagram();
+renderFretboard();
 
 const lessons = [
   {
@@ -541,13 +1051,15 @@ function renderStrings() {
   `).join("");
 }
 
+
 document.addEventListener("click",e=>{
   const button=e.target.closest("[data-string]");
-  if(!button) return;
+  if(!button)return;
+
+  // コード練習や単音練習の別のボタンには反応しない
+  if(button.dataset.string === undefined) return;
 
   selected=Number(button.dataset.string);
-  stableHits=0;
-  lastNote="";
   save();
   renderStrings();
 });
